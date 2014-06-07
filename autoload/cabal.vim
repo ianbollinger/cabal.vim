@@ -73,6 +73,12 @@ function! cabal#ListFind(predicate, default, list) abort
   return a:default
 endfunction
 
+""
+" The identity function.
+function! cabal#Id(x) abort
+  return a:x
+endfunction
+
 function! s:GetAndResetCompatibilityOptions() abort
   let l:saved_compatibility_options = &cpoptions
   set cpoptions&vim
