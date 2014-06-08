@@ -20,34 +20,24 @@
 
 ""
 "
-function! fn#pattern#Match(string, pattern, default) abort
-  let l:match = match(a:string, a:pattern)
-  return s:ValidMatch(l:match) ? a:default : l:match
+function! fn#bundle#Enter(file) abort
+  return maktaba#plugin#Enter(a:file)
 endfunction
 
 ""
 "
-function! fn#pattern#Choice(patterns) abort
-  return s:Group(join(fn#assert#IsList(a:patterns), '|'))
+function! fn#bundle#Get(bundle_name) abort
+  return maktaba#plugin#Get(a:bundle_name)
 endfunction
 
 ""
 "
-function! fn#pattern#SepBy1(pattern, separator) abort
-  return a:pattern . fn#pattern#Many(a:separator . a:pattern)
+function! fn#bundle#GetFlag(bundle, flag_name) abort
+  return a:bundle.Flag(a:flag_name)
 endfunction
 
 ""
 "
-function! fn#pattern#Many(pattern) abort
-  return s:Group(a:pattern) . '*'
+function! fn#bundle#SetFlagDefault(bundle, flag_name, default) abort
+  call a:bundle.Flag(a:flag_name, a:default)
 endfunction
-
-function! s:ValidMatch(match_result) abort
-  return a:match_result >= 0
-endfunction
-
-function! s:Group(pattern) abort
-  return '%(' . a:pattern . ')'
-endfunction
-

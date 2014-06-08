@@ -20,34 +20,7 @@
 
 ""
 "
-function! fn#pattern#Match(string, pattern, default) abort
-  let l:match = match(a:string, a:pattern)
-  return s:ValidMatch(l:match) ? a:default : l:match
-endfunction
-
-""
-"
-function! fn#pattern#Choice(patterns) abort
-  return s:Group(join(fn#assert#IsList(a:patterns), '|'))
-endfunction
-
-""
-"
-function! fn#pattern#SepBy1(pattern, separator) abort
-  return a:pattern . fn#pattern#Many(a:separator . a:pattern)
-endfunction
-
-""
-"
-function! fn#pattern#Many(pattern) abort
-  return s:Group(a:pattern) . '*'
-endfunction
-
-function! s:ValidMatch(match_result) abort
-  return a:match_result >= 0
-endfunction
-
-function! s:Group(pattern) abort
-  return '%(' . a:pattern . ')'
+function! fn#String#IsPrefixOf(prefix, string) abort
+  return maktaba#string#StartsWith(a:string, a:prefix)
 endfunction
 

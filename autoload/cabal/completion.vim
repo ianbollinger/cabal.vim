@@ -73,7 +73,7 @@ endfunction
 function! s:FilteredFieldNames(completion, truncate) abort
   let l:x = filter(
       \ cabal#syntax#Keywords(),
-      \ 'maktaba#string#StartsWith(v:val, a:completion)')
+      \ 'fn#string#IsPrefixOf(a:completion, v:val)')
   return a:truncate ? map(l:x, 'strpart(v:val, l:length)') : l:x
 endfunction
 

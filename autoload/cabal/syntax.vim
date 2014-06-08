@@ -18,22 +18,22 @@
 " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 " SOFTWARE.
 
-let s:plugin = maktaba#plugin#Get('cabal')
+let s:bundle = fn#bundle#Get('cabal')
 
 ""
 "
 function! cabal#syntax#FieldNames() abort
-  return keys(s:plugin.Flag('syntax_fields'))
+  return keys(fn#bundle#GetFlag(s:bundle, 'syntax_fields'))
 endfunction
 
 ""
 "
 function! cabal#syntax#Keywords() abort
   return cabal#syntax#FieldNames()
-      \ + s:plugin.Flag('syntax_sections')
-      \ + s:plugin.Flag('syntax_build_types')
-      \ + s:plugin.Flag('syntax_licenses')
-      \ + s:plugin.Flag('syntax_test_suite_types')
+      \ + fn#bundle#GetFlag(s:bundle, 'syntax_sections')
+      \ + fn#bundle#GetFlag(s:bundle, 'syntax_build_types')
+      \ + fn#bundle#GetFlag(s:bundle, 'syntax_licenses')
+      \ + fn#bundle#GetFlag(s:bundle, 'syntax_test_suite_types')
 endfunction
 
 ""
@@ -99,12 +99,12 @@ function! s:DefineConstants() abort
       \ 'version': '\d+%(\.%(\d)+)*',
       \ 'boolean': fn#pattern#Choice(['True', 'False']),
       \ 'build_type':
-        \ escape(fn#pattern#Choice(s:plugin.Flag('syntax_build_types')), '.'),
+        \ escape(fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_build_types')), '.'),
       \ 'token': '%([^"][^[:space:],]*|"[^"]+")',
-      \ 'license': fn#pattern#Choice(s:plugin.Flag('syntax_licenses')),
+      \ 'license': fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_licenses')),
       \ 'package': '[[:alpha:]][a-zA-Z0-9-]*',
       \ 'type':
-        \ escape(fn#pattern#Choice(s:plugin.Flag('syntax_test_suite_types')), '.'),
+        \ escape(fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_test_suite_types')), '.'),
       \
       \ 'identifier': '[[:alpha:]][a-zA-Z0-9_]*'
       \ }
@@ -137,13 +137,13 @@ endfunction
 
 function! s:DefineKeywords() abort
   call fn#dict#Map_(function('cabal#syntax#Keyword'), {
-      \ 'Todo': s:plugin.Flag('syntax_todo'),
-      \ 'SectionName': s:plugin.Flag('syntax_sections'),
+      \ 'Todo': fn#bundle#GetFlag(s:bundle, 'syntax_todo'),
+      \ 'SectionName': fn#bundle#GetFlag(s:bundle, 'syntax_sections'),
       \ 'FieldName': cabal#syntax#FieldNames(),
       \ 'Function': ['arch', 'flag', 'impl', 'os'],
       \ 'Conditional': ['else', 'endif', 'if'],
       \ 'Boolean': ['False', 'True'],
-      \ 'Compiler': s:plugin.Flag('syntax_compilers'),
+      \ 'Compiler': fn#bundle#GetFlag(s:bundle, 'syntax_compilers'),
       \ })
 endfunction
 
@@ -153,14 +153,17 @@ function! s:DefineMatches() abort
       \ })
   call cabal#syntax#Match(
       \ 'Operator',
-      \ fn#pattern#Choice(s:plugin.Flag('syntax_operators')),
+      \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_operators')),
       \ {'contained': 1, 'display': 1}
       \ )
   call cabal#syntax#Match('InvalidValue', '.*$', {'contained': 1})
 endfunction
 
 function! s:DefineFields() abort
-  call fn#dict#Map_(function('s:DefineField'), s:plugin.Flag('syntax_fields'))
+  call fn#dict#Map_(
+      \ function('s:DefineField'),
+      \ fn#bundle#GetFlag(s:bundle, 'syntax_fields')
+      \ )
 endfunction
 
 function! s:DefineRegions() abort
@@ -169,7 +172,7 @@ function! s:DefineRegions() abort
       \ '^(\s*)[^-].{-}\s*:\s*(\n\1)*(%$|\n[^ ])')
   call cabal#syntax#Region(
       \ 'Identifier',
-      \ '\c^' . fn#pattern#Choice(s:plugin.Flag('syntax_sections')),
+      \ '\c^' . fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_sections')),
       \ '$', {
         \ 'matchgroup': 'Section',
         \ 'display': 1,
@@ -200,7 +203,7 @@ function! s:DefineRegions() abort
         \ })
   call cabal#syntax#Region(
       \ 'Fold',
-      \ '\c^' . fn#pattern#Choice(s:plugin.Flag('syntax_sections')) . '>',
+      \ '\c^' . fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_sections')) . '>',
       \ '\ze^\S', {
         \ 'skip': '^--',
         \ 'transparent': 1,
@@ -208,7 +211,7 @@ function! s:DefineRegions() abort
         \ })
   call cabal#syntax#Match(
       \ 'Compiler',
-      \ fn#pattern#Choice(s:plugin.Flag('syntax_compilers')),
+      \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_compilers')),
       \ {'contained': 1, 'display': 1}
       \ )
   call cabal#syntax#Match(

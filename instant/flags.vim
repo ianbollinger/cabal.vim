@@ -18,7 +18,7 @@
 " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 " SOFTWARE.
 
-let [s:plugin, s:enter] = maktaba#plugin#Enter(expand('<sfile>:p'))
+let [s:bundle, s:enter] = fn#bundle#Enter(expand('<sfile>:p'))
 if !s:enter
   finish
 endif
@@ -123,9 +123,9 @@ let s:all_fields = fn#dict#Union(
     \ s:source_repository_fields,
     \ )
 
-call s:plugin.Flag('syntax_fields', s:all_fields)
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_fields', s:all_fields)
 
-call s:plugin.Flag('syntax_sections', [
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_sections', [
     \ 'benchmark',
     \ 'executable',
     \ 'flag',
@@ -134,14 +134,14 @@ call s:plugin.Flag('syntax_sections', [
     \ 'test-suite',
     \ ])
 
-call s:plugin.Flag('syntax_build_types', [
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_build_types', [
     \ 'Configure',
     \ 'Custom',
     \ 'Make',
     \ 'Simple',
     \ ])
 
-call s:plugin.Flag('syntax_licenses', [
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_licenses', [
     \ 'AGPL',
     \ 'AGPL-3',
     \ 'AllRightsReserved',
@@ -161,18 +161,18 @@ call s:plugin.Flag('syntax_licenses', [
     \ 'PublicDomain',
     \ ])
 
-call s:plugin.Flag('syntax_test_suite_types', [
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_test_suite_types', [
     \ 'detailed-1.0',
     \ 'exitcode-stdio-1.0',
     \ ])
 
-call s:plugin.Flag('syntax_todo', [
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_todo', [
     \ 'FIXME',
     \ 'TODO',
     \ 'XXX'
     \ ])
 
-call s:plugin.Flag('syntax_compilers', [
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_compilers', [
     \ 'GHC',
     \ 'HBC',
     \ 'Helium',
@@ -183,7 +183,7 @@ call s:plugin.Flag('syntax_compilers', [
     \ 'YHC',
     \ ])
 
-call s:plugin.Flag('syntax_operators', [
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_operators', [
     \ '!',
     \ '\&\&',
     \ '\*',
