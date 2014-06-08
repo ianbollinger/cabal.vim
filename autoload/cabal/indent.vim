@@ -30,34 +30,34 @@ endfunction
 
 ""
 "
-function! cabal#indent#IndentExpr(lnum) abort
-  let l:previous_line = getline(a:lnum - 1)
+function! cabal#indent#IndentExpr(line_number) abort
+  let l:previous_line = getline(a:line_number - 1)
   return
       \ s:IsAllWhitespace(l:previous_line)   ? 0            :
       \ s:IsLongField(l:previous_line)       ? shiftwidth() :
-      \ s:IsIncompleteField(l:previous_line) ? s:IncompleteFieldIndent(a:lnum) :
-      \                                        indent(a:lnum - 1)
+      \ s:IsIncompleteField(l:previous_line) ? s:IncompleteFieldIndent(a:line_number) :
+      \                                        indent(a:line_number - 1)
 endfunction
 
 function! s:SetIndentKeys(keys) abort
   call cabal#Execute('setlocal', 'indentkeys=' . join(a:keys, ','))
 endfunction
 
-function! s:IndentOfPreviousField(lnum) abort
-  for l:lnum in range(a:lnum, 0, -1)
-    let l:line = getline(l:lnum)
+function! s:IndentOfPreviousField(line_number) abort
+  for l:line_number in range(a:line_number, 0, -1)
+    let l:line = getline(l:line_number)
     if s:IsField(l:line)
-      return indent(l:lnum)
+      return indent(l:line_number)
     endif
   endfor
   return 0
 endfunction
 
-function! s:IndentOfNextField(lnum) abort
-  for l:lnum in range(a:lnum, line('$'))
-    let l:line = getline(l:lnum)
+function! s:IndentOfNextField(line_number) abort
+  for l:line_number in range(a:line_number, line('$'))
+    let l:line = getline(l:line_number)
     if s:IsField(l:line)
-      return indent(l:lnum)
+      return indent(l:line_number)
     endif
   endfor
   return 0
