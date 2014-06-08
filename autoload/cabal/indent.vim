@@ -44,7 +44,7 @@ function! s:SetIndentKeys(keys) abort
 endfunction
 
 function! s:IndentOfPreviousField(line_number) abort
-  for l:line_number in range(a:line_number, 0, -1)
+  for l:line_number in range(a:line_number, 1, -1)
     let l:line = getline(l:line_number)
     if s:IsField(l:line)
       return indent(l:line_number)
