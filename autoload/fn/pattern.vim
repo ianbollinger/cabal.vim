@@ -19,9 +19,36 @@
 " SOFTWARE.
 
 ""
-" Omnicompleter for Cabal package descriptions.
-" @public
-function! cabal#Omnifunc(find_start, current_completion) abort
-  return cabal#completion#Omnifunc(a:find_start, a:current_completion)
+"
+function! fn#pattern#Match(string, pattern, default) abort
+  let l:match = match(a:string, a:pattern)
+  return s:ValidMatch(l:match) ? a:default : l:match
+endfunction
+
+""
+"
+function! fn#pattern#Choice(patterns) abort
+  call maktaba#ensure#IsList(a:patterns)
+  return s:Group(join(a:patterns, '|'))
+endfunction
+
+""
+"
+function! fn#pattern#SepBy1(pattern, separator) abort
+  return a:pattern . fn#pattern#Many(a:separator . a:pattern)
+endfunction
+
+""
+"
+function! fn#pattern#Many(pattern) abort
+  return s:Group(a:pattern) . '*'
+endfunction
+
+function! s:ValidMatch(match_result) abort
+  return a:match_result >= 0
+endfunction
+
+function! s:Group(pattern) abort
+  return '%(' . a:pattern . ')'
 endfunction
 

@@ -21,51 +21,51 @@
 describe 'cabal#Omnifunc'
 end
 
-describe 'cabal#WithDefaultCompatibilityOptions'
+describe 'fn#WithDefaultCompatibilityOptions'
 end
 
-describe 'cabal#Execute'
+describe 'fn#Execute'
   it 'calls execute with concatenated arguments'
     let g:example = ''
-    call cabal#Execute('let g:example', '=', '"foo', 'bar"')
+    call fn#Execute('let g:example', '=', '"foo', 'bar"')
     Expect g:example is# 'foo bar'
   end
 end
 
-describe 'cabal#Quote'
+describe 'fn#Quote'
   it 'surrounds strings with quotation marks'
-    Expect cabal#Quote('a string') is# '"a string"'
+    Expect fn#Quote('a string') is# '"a string"'
   end
   it 'escapes quotation marks'
-    Expect cabal#Quote('"quotes"') is# '"\"quotes\""'
+    Expect fn#Quote('"quotes"') is# '"\"quotes\""'
   end
 end
 
-describe 'cabal#CursorColumn'
+describe 'fn#cursor#Column'
   it 'returns the column of the character left of the cursor'
     " TODO: this just copies the implementation.
-    Expect cabal#CursorColumn() == col('.') - 1
+    Expect fn#cursor#Column() == col('.') - 1
   end
 end
 
-describe 'cabal#CursorLine'
-  it 'returns the line the cursor is on'
+describe 'fn#cursor#LineText'
+  it 'returns the text of the line the cursor is on'
   end
 end
 
-describe 'cabal#ListFind'
+describe 'fn#list#Find'
   it 'returns the first item that matches predicate'
     let l:list = ['one', 'two', 'three', 'four', 'five']
     function! LengthFour(string) abort
       return strlen(a:string) == 4
     endfunction
-    Expect cabal#ListFind(function('LengthFour'), '', l:list) is# 'four'
+    Expect fn#list#Find(function('LengthFour'), '', l:list) is# 'four'
   end
 end
 
-describe 'cabal#Id'
+describe 'fn#Id'
   it 'is the identity function'
-    Expect cabal#Id('x') is# 'x'
+    Expect fn#Id('x') is# 'x'
   end
 end
 

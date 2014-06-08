@@ -113,7 +113,7 @@ let s:source_repository_fields = {
     \ 'tag': {'pattern': 'token'},
     \ }
 
-let s:all_fields = cabal#dict#Union(
+let s:all_fields = fn#dict#Union(
     \ s:root_fields,
     \ s:library_fields,
     \ s:executable_fields,

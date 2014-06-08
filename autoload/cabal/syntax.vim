@@ -37,25 +37,6 @@ function! cabal#syntax#Keywords() abort
 endfunction
 
 ""
-" The name of the syntax match group under the cursor.
-function! cabal#syntax#NameAtCursor(...) abort
-  let l:column = cabal#CursorColumn() + (s:InInsertMode() ==# 'i' ? 0 : 1)
-  return cabal#syntax#Name(cabal#CursorLine(), l:column)
-endfunction
-
-""
-" The name of the syntax match group at the given {line} and {column}.
-function! cabal#syntax#Name(line, column) abort
-  return cabal#syntax#Attribute('name', a:line, a:column)
-endfunction
-
-""
-" The value of syntax {attribute} at the given {line} and {column}.
-function! cabal#syntax#Attribute(attribute, line, column) abort
-  return synIDattr(synID(a:line, a:column, 0), a:attribute)
-endfunction
-
-""
 " Entry point for the syntax highlighter for Cabal package descriptions.
 function! cabal#syntax#Main() abort
   syntax include @Haskell syntax/haskell.vim
@@ -77,7 +58,7 @@ function! cabal#syntax#Keyword(group_name, keywords, ...) abort
   if !has_key(l:options, 'contained')
     let l:options.contained = 1
   endif
-  call cabal#Execute(
+  call fn#Execute(
       \ 'syntax keyword',
       \ s:match_group_prefix . a:group_name,
       \ s:FormatOptions(l:options),
@@ -91,7 +72,7 @@ function! cabal#syntax#Match(group_name, pattern, ...) abort
   let l:options = a:0 > 0 ? s:FormatOptions(a:1) : ' '
   let l:match_group = s:match_group_prefix . a:group_name
   let l:pattern = s:Pattern(a:pattern)
-  call cabal#Execute('syntax match', l:match_group, l:options, l:pattern)
+  call fn#Execute('syntax match', l:match_group, l:options, l:pattern)
 endfunction
 
 ""
@@ -101,7 +82,7 @@ function! cabal#syntax#Region(group_name, start, end, ...) abort
   let l:match_group = s:match_group_prefix . a:group_name
   let l:start = 'start=' . s:Pattern(a:start)
   let l:end = 'end=' . s:Pattern(a:end)
-  call cabal#Execute('syntax region', l:match_group, l:start, l:end, l:options)
+  call fn#Execute('syntax region', l:match_group, l:start, l:end, l:options)
 endfunction
 
 ""
@@ -110,31 +91,27 @@ function! cabal#syntax#FoldText() abort
   return getline(v:foldstart) . ' '
 endfunction
 
-function! s:InInsertMode() abort
-  return mode() ==# 'i'
-endfunction
-
 function! s:DefineConstants() abort
   let s:match_group_prefix = 'cabal'
 
   let g:cabal_syntax_patterns = {
       \ 'free_form': '.*',
       \ 'version': '\d+%(\.%(\d)+)*',
-      \ 'boolean': cabal#pattern#Choice(['True', 'False']),
+      \ 'boolean': fn#pattern#Choice(['True', 'False']),
       \ 'build_type':
-        \ escape(cabal#pattern#Choice(s:plugin.Flag('syntax_build_types')), '.'),
+        \ escape(fn#pattern#Choice(s:plugin.Flag('syntax_build_types')), '.'),
       \ 'token': '%([^"][^[:space:],]*|"[^"]+")',
-      \ 'license': cabal#pattern#Choice(s:plugin.Flag('syntax_licenses')),
+      \ 'license': fn#pattern#Choice(s:plugin.Flag('syntax_licenses')),
       \ 'package': '[[:alpha:]][a-zA-Z0-9-]*',
       \ 'type':
-        \ escape(cabal#pattern#Choice(s:plugin.Flag('syntax_test_suite_types')), '.'),
+        \ escape(fn#pattern#Choice(s:plugin.Flag('syntax_test_suite_types')), '.'),
       \
       \ 'identifier': '[[:alpha:]][a-zA-Z0-9_]*'
       \ }
 
   call extend(g:cabal_syntax_patterns, {
       \ 'token_list':
-        \ cabal#pattern#SepBy1(g:cabal_syntax_patterns.token, '\s*,=\s*'),
+        \ fn#pattern#SepBy1(g:cabal_syntax_patterns.token, '\s*,=\s*'),
       \ 'cabal_version': '\>\=\s*' . g:cabal_syntax_patterns.version,
       \
       \ 'url': g:cabal_syntax_patterns.free_form,
@@ -159,7 +136,7 @@ function! s:SetLocalVimOptions() abort
 endfunction
 
 function! s:DefineKeywords() abort
-  call cabal#dict#Map_(function('cabal#syntax#Keyword'), {
+  call fn#dict#Map_(function('cabal#syntax#Keyword'), {
       \ 'Todo': s:plugin.Flag('syntax_todo'),
       \ 'SectionName': s:plugin.Flag('syntax_sections'),
       \ 'FieldName': cabal#syntax#FieldNames(),
@@ -176,16 +153,14 @@ function! s:DefineMatches() abort
       \ })
   call cabal#syntax#Match(
       \ 'Operator',
-      \ cabal#pattern#Choice(s:plugin.Flag('syntax_operators')),
+      \ fn#pattern#Choice(s:plugin.Flag('syntax_operators')),
       \ {'contained': 1, 'display': 1}
       \ )
   call cabal#syntax#Match('InvalidValue', '.*$', {'contained': 1})
 endfunction
 
 function! s:DefineFields() abort
-  call cabal#dict#Map_(
-      \ function('s:DefineField'),
-      \ s:plugin.Flag('syntax_fields'))
+  call fn#dict#Map_(function('s:DefineField'), s:plugin.Flag('syntax_fields'))
 endfunction
 
 function! s:DefineRegions() abort
@@ -194,7 +169,7 @@ function! s:DefineRegions() abort
       \ '^(\s*)[^-].{-}\s*:\s*(\n\1)*(%$|\n[^ ])')
   call cabal#syntax#Region(
       \ 'Identifier',
-      \ '\c^' . cabal#pattern#Choice(s:plugin.Flag('syntax_sections')),
+      \ '\c^' . fn#pattern#Choice(s:plugin.Flag('syntax_sections')),
       \ '$', {
         \ 'matchgroup': 'Section',
         \ 'display': 1,
@@ -203,7 +178,7 @@ function! s:DefineRegions() abort
         \ })
   call cabal#syntax#Region(
       \ 'Identifier',
-      \ cabal#pattern#Choice(['os', 'arch', 'impl', 'flag']) . '\(',
+      \ fn#pattern#Choice(['os', 'arch', 'impl', 'flag']) . '\(',
       \ '\)', {
         \ 'matchgroup': 'Keyword',
         \ 'display': 1,
@@ -213,7 +188,7 @@ function! s:DefineRegions() abort
         \ })
   call cabal#syntax#Region(
       \ 'Identifier',
-      \ '\c^\s*' . cabal#pattern#Choice(['if', 'else', 'endif']),
+      \ '\c^\s*' . fn#pattern#Choice(['if', 'else', 'endif']),
       \ '$', {
         \ 'matchgroup': 'Conditional',
         \ 'display': 1,
@@ -225,7 +200,7 @@ function! s:DefineRegions() abort
         \ })
   call cabal#syntax#Region(
       \ 'Fold',
-      \ '\c^' . cabal#pattern#Choice(s:plugin.Flag('syntax_sections')) . '>',
+      \ '\c^' . fn#pattern#Choice(s:plugin.Flag('syntax_sections')) . '>',
       \ '\ze^\S', {
         \ 'skip': '^--',
         \ 'transparent': 1,
@@ -233,7 +208,7 @@ function! s:DefineRegions() abort
         \ })
   call cabal#syntax#Match(
       \ 'Compiler',
-      \ cabal#pattern#Choice(s:plugin.Flag('syntax_compilers')),
+      \ fn#pattern#Choice(s:plugin.Flag('syntax_compilers')),
       \ {'contained': 1, 'display': 1}
       \ )
   call cabal#syntax#Match(
@@ -264,7 +239,7 @@ function! s:DefineLinks() abort
       \ 'String': 'String',
       \ 'Underlined': 'Underlined',
       \ }, cabal#haddock#Links())
-  call cabal#dict#Map_(function('s:Link'), l:links)
+  call fn#dict#Map_(function('s:Link'), l:links)
 endfunction
 
 function! s:DefineField(field, value) abort
@@ -305,7 +280,7 @@ function! s:ValuePattern(value) abort
 endfunction
 
 function! s:Link(from, to) abort
-  call cabal#Execute(
+  call fn#Execute(
       \ 'highlight default link',
       \ s:match_group_prefix . a:from,
       \ a:to,
@@ -313,7 +288,7 @@ function! s:Link(from, to) abort
 endfunction
 
 function! s:Pattern(string) abort
-  return cabal#Quote('\v' . a:string)
+  return fn#Quote('\v' . a:string)
 endfunction
 
 function! s:StripHyphens(string) abort
@@ -321,7 +296,7 @@ function! s:StripHyphens(string) abort
 endfunction
 
 function! s:FormatOptions(options) abort
-  return cabal#dict#ConcatMap(function('s:FormatOption'), a:options)
+  return fn#dict#ConcatMap(function('s:FormatOption'), a:options)
 endfunction
 
 function! s:FormatOption(key, value) abort

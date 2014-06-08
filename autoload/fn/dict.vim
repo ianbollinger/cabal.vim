@@ -20,7 +20,7 @@
 
 ""
 " (Bi-)map {function} over a heterogeneous {dictionary} and discard the result.
-function! cabal#dict#Map_(function, dictionary) abort
+function! fn#dict#Map_(function, dictionary) abort
   call maktaba#ensure#IsFuncref(a:function)
   call maktaba#ensure#IsDict(a:dictionary)
   for [l:key, l:value] in items(a:dictionary)
@@ -31,7 +31,7 @@ endfunction
 
 ""
 " Left fold {function} over a heterogeneous {dictionary}.
-function! cabal#dict#FoldLeft(function, initial, dictionary) abort
+function! fn#dict#FoldLeft(function, initial, dictionary) abort
   call maktaba#ensure#IsFuncref(a:function)
   call maktaba#ensure#IsDict(a:dictionary)
   let l:accumulator = a:initial
@@ -44,7 +44,7 @@ endfunction
 
 ""
 " Map {function} over a heterogeneous {dictionary} and concatenate the result.
-function! cabal#dict#ConcatMap(function, dictionary) abort
+function! fn#dict#ConcatMap(function, dictionary) abort
   call maktaba#ensure#IsFuncref(a:function)
   call maktaba#ensure#IsDict(a:dictionary)
   let l:accumulator = ''
@@ -57,7 +57,7 @@ endfunction
 
 ""
 " Right-biased union of a sequence of dictionaries.
-function! cabal#dict#Union(...) abort
+function! fn#dict#Union(...) abort
   let l:accumulator = {}
   for l:dictionary in a:000
     call maktaba#ensure#IsDict(l:dictionary)

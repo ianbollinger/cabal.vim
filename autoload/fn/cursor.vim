@@ -19,9 +19,14 @@
 " SOFTWARE.
 
 ""
-" Omnicompleter for Cabal package descriptions.
-" @public
-function! cabal#Omnifunc(find_start, current_completion) abort
-  return cabal#completion#Omnifunc(a:find_start, a:current_completion)
+" The number of the column containing the cursor.
+function! fn#cursor#Column() abort
+  return col('.') - 1
+endfunction
+
+""
+" The text of the line containing the cursor.
+function! fn#cursor#LineText() abort
+  return getline('.')
 endfunction
 

@@ -31,7 +31,7 @@ function! s:FindCompletionStart() abort
 endfunction
 
 function! s:CompletionPossible() abort
-  return cabal#CursorColumn() > 0
+  return fn#cursor#Column() > 0
 endfunction
 
 function! s:CompletionPosition() abort
@@ -43,7 +43,7 @@ function! s:CompletionError() abort
 endfunction
 
 function! s:InsideComment() abort
-  return cabal#syntax#NameAtCursor() =~# 'Comment'
+  return fn#syntax#NameAtCursor() =~# 'Comment'
 endfunction
 
 function! s:KeywordPosition() abort
@@ -55,11 +55,11 @@ function! s:DoCompletion(current_completion) abort
 endfunction
 
 function! s:LineBeforeCursor() abort
-  return s:LineBeforeColumn(cabal#CursorColumn())
+  return s:LineBeforeColumn(fn#cursor#Column())
 endfunction
 
 function! s:LineBeforeColumn(column) abort
-  return cabal#CursorLine()[: a:column - 1]
+  return fn#cursor#LineText()[: a:column - 1]
 endfunction
 
 function! s:CompleteWords(completion_position, current_completion) abort
@@ -78,11 +78,11 @@ function! s:FilteredFieldNames(completion, truncate) abort
 endfunction
 
 function! s:InvokedFromYouCompleteMe(position, completion) abort
-  return a:position != cabal#CursorColumn() && empty(a:completion)
+  return a:position != fn#cursor#Column() && empty(a:completion)
 endfunction
 
 function! s:PatternPosition(pattern, string) abort
-  return cabal#pattern#Match(a:string, a:pattern, strlen(a:string))
+  return fn#pattern#Match(a:string, a:pattern, strlen(a:string))
 endfunction
 
 function! s:KeywordPattern() abort

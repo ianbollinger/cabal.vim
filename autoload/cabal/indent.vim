@@ -40,7 +40,7 @@ function! cabal#indent#IndentExpr(line_number) abort
 endfunction
 
 function! s:SetIndentKeys(keys) abort
-  call cabal#Execute('setlocal', 'indentkeys=' . join(a:keys, ','))
+  call fn#Execute('setlocal', 'indentkeys=' . join(a:keys, ','))
 endfunction
 
 function! s:IndentOfPreviousField(line_number) abort
@@ -75,7 +75,7 @@ endfunction
 
 function! s:IsLongField(string) abort
   let l:pattern =
-      \ '\v^\s*' . cabal#pattern#Choice(s:LongFieldNames()) . '\s*:\s*'
+      \ '\v^\s*' . fn#pattern#Choice(s:LongFieldNames()) . '\s*:\s*'
   return a:string =~# l:pattern
 endfunction
 

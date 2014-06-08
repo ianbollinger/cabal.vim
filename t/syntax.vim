@@ -28,17 +28,17 @@ describe 'cabal#syntax#Keywords'
   end
 end
 
-describe 'cabal#syntax#NameAtCursor'
+describe 'fn#syntax#NameAtCursor'
   it ''
   end
 end
 
-describe 'cabal#syntax#Name'
+describe 'fn#syntax#Name'
   it ''
   end
 end
 
-describe 'cabal#syntax#Attribute'
+describe 'fn#syntax#Attribute'
   it ''
   end
 end

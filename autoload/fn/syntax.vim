@@ -19,36 +19,25 @@
 " SOFTWARE.
 
 ""
-"
-function! cabal#pattern#Match(string, pattern, default) abort
-  let l:match = match(a:string, a:pattern)
-  return s:ValidMatch(l:match) ? a:default : l:match
+" The name of the syntax match group under the cursor.
+function! fn#syntax#NameAtCursor(...) abort
+  let l:column = fn#cursor#Column() + (s:InInsertMode() ==# 'i' ? 0 : 1)
+  return fn#syntax#Name(fn#cursor#LineText(), l:column)
 endfunction
 
 ""
-"
-function! cabal#pattern#Choice(patterns) abort
-  call maktaba#ensure#IsList(a:patterns)
-  return s:Group(join(a:patterns, '|'))
+" The name of the syntax match group at the given {line} and {column}.
+function! fn#syntax#Name(line, column) abort
+  return fn#syntax#Attribute('name', a:line, a:column)
 endfunction
 
 ""
-"
-function! cabal#pattern#SepBy1(pattern, separator) abort
-  return a:pattern . cabal#pattern#Many(a:separator . a:pattern)
+" The value of syntax {attribute} at the given {line} and {column}.
+function! fn#syntax#Attribute(attribute, line, column) abort
+  return synIDattr(synID(a:line, a:column, 0), a:attribute)
 endfunction
 
-""
-"
-function! cabal#pattern#Many(pattern) abort
-  return s:Group(a:pattern) . '*'
-endfunction
-
-function! s:ValidMatch(match_result) abort
-  return a:match_result >= 0
-endfunction
-
-function! s:Group(pattern) abort
-  return '%(' . a:pattern . ')'
+function! s:InInsertMode() abort
+  return mode() ==# 'i'
 endfunction
 

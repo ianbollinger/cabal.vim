@@ -18,22 +18,22 @@
 " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 " SOFTWARE.
 
-describe 'cabal#pattern#Match'
+describe 'fn#pattern#Match'
   it ''
   end
 end
 
-describe 'cabal#pattern#Choice'
+describe 'fn#pattern#Choice'
   it ''
   end
 end
 
-describe 'cabal#pattern#SepBy1'
+describe 'fn#pattern#SepBy1'
   it ''
   end
 end
 
-describe 'cabal#pattern#Many'
+describe 'fn#pattern#Many'
   it ''
   end
 end
