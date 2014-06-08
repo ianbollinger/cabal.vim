@@ -22,7 +22,7 @@
 "
 function! fn#pattern#Match(string, pattern, default) abort
   let l:match = match(a:string, a:pattern)
-  return s:ValidMatch(l:match) ? a:default : l:match
+  return s:ValidMatch(l:match) ? l:match : a:default
 endfunction
 
 ""

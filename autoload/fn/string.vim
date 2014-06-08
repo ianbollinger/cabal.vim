@@ -20,7 +20,7 @@
 
 ""
 "
-function! fn#String#IsPrefixOf(prefix, string) abort
+function! fn#string#IsPrefixOf(prefix, string) abort
   return maktaba#string#StartsWith(a:string, a:prefix)
 endfunction
 
