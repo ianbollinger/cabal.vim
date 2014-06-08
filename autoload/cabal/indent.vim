@@ -45,8 +45,7 @@ endfunction
 
 function! s:IndentOfPreviousField(line_number) abort
   for l:line_number in range(a:line_number, 1, -1)
-    let l:line = getline(l:line_number)
-    if s:IsField(l:line)
+    if s:IsField(getline(l:line_number))
       return indent(l:line_number)
     endif
   endfor
@@ -55,8 +54,7 @@ endfunction
 
 function! s:IndentOfNextField(line_number) abort
   for l:line_number in range(a:line_number, s:LastLineNumber())
-    let l:line = getline(l:line_number)
-    if s:IsField(l:line)
+    if s:IsField(getline(l:line_number))
       return indent(l:line_number)
     endif
   endfor
