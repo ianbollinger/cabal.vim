@@ -162,14 +162,37 @@ call fn#bundle#SetFlagDefault(s:bundle, 'syntax_licenses', [
     \ ])
 
 call fn#bundle#SetFlagDefault(s:bundle, 'syntax_test_suite_types', [
-    \ 'detailed-1.0',
+    \ 'detailed-0.9',
     \ 'exitcode-stdio-1.0',
+    \ ])
+
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_test_benchmark_types', [
+    \ 'exitcode-stdio-1.0',
+    \ ])
+
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_repository_kind', [
+    \ 'head',
+    \ 'this',
+    \ ])
+
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_repository_type', [
+    \ 'arch',
+    \ 'Bazaar',
+    \ 'bzr',
+    \ 'CVS',
+    \ 'Darcs',
+    \ 'Git',
+    \ 'GnuArch',
+    \ 'hg',
+    \ 'Mercurial',
+    \ 'Monotone',
+    \ 'SVN',
     \ ])
 
 call fn#bundle#SetFlagDefault(s:bundle, 'syntax_todo', [
     \ 'FIXME',
     \ 'TODO',
-    \ 'XXX'
+    \ 'XXX',
     \ ])
 
 call fn#bundle#SetFlagDefault(s:bundle, 'syntax_compilers', [
@@ -179,7 +202,8 @@ call fn#bundle#SetFlagDefault(s:bundle, 'syntax_compilers', [
     \ 'Hugs',
     \ 'JHC',
     \ 'LHC',
-    \ 'NHC',
+    \ 'NHC98',
+    \ 'UHC',
     \ 'YHC',
     \ ])
 
@@ -188,7 +212,7 @@ call fn#bundle#SetFlagDefault(s:bundle, 'syntax_operators', [
     \ '\&\&',
     \ '\*',
     \ '\<',
-    \ '\<=',
+    \ '\<\=',
     \ '\=\=',
     \ '\>',
     \ '\>\=',
