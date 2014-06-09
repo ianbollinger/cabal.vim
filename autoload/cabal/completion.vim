@@ -30,11 +30,9 @@ function! cabal#completion#Omnifunc(find_start, current_completion) abort
 endfunction
 
 function! s:CompletionPosition() abort
-  return s:InsideComment() ? fn#completion#Error() : s:KeywordPosition()
-endfunction
-
-function! s:InsideComment() abort
-  return fn#syntax#NameAtCursor() =~# 'Comment'
+  return cabal#syntax#InsideComment()
+      \ ? fn#completion#Error()
+      \ : s:KeywordPosition()
 endfunction
 
 function! s:KeywordPosition() abort

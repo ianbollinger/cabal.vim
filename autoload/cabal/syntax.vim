@@ -34,6 +34,12 @@ endfunction
 
 ""
 "
+function! cabal#syntax#InsideComment() abort
+  return fn#syntax#NameAtCursor() =~# 'Comment'
+endfunction
+
+""
+"
 function! cabal#syntax#Keywords() abort
   return cabal#syntax#FieldNames()
       \ + fn#bundle#GetFlag(s:bundle, 'syntax_sections')
