@@ -39,7 +39,7 @@ function! s:InsideComment() abort
 endfunction
 
 function! s:KeywordPosition() abort
-  return s:PatternPosition(
+  return fn#pattern#MatchLast(
       \ cabal#syntax#KeywordPattern(),
       \ fn#cursor#TextBefore()
       \ )
@@ -53,9 +53,5 @@ function! s:FilteredFieldNames(completion) abort
   return filter(
       \ cabal#syntax#Keywords(),
       \ 'fn#string#IsPrefixOf(a:completion, v:val)')
-endfunction
-
-function! s:PatternPosition(pattern, string) abort
-  return fn#pattern#Match(a:string, a:pattern . '$', strlen(a:string))
 endfunction
 
