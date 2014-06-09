@@ -18,10 +18,8 @@
 " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 " SOFTWARE.
 
-""
-" Omnicompleter for Cabal package descriptions.
-" @public
-function! cabal#Omnifunc(find_start, current_completion) abort
-  return cabal#completion#Omnifunc(a:find_start, a:current_completion)
-endfunction
+describe 'cabal#completeion#Omnifunc'
+  it ''
+  end
+end
 

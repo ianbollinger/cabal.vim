@@ -30,37 +30,39 @@ endfunction
 
 ""
 "
-function! cabal#indent#IndentExpr(lnum) abort
-  let l:previous_line = getline(a:lnum - 1)
+function! cabal#indent#IndentExpr(line_number) abort
+  let l:previous_line = getline(a:line_number - 1)
   return
       \ s:IsAllWhitespace(l:previous_line)   ? 0            :
       \ s:IsLongField(l:previous_line)       ? shiftwidth() :
-      \ s:IsIncompleteField(l:previous_line) ? s:IncompleteFieldIndent(a:lnum) :
-      \                                        indent(a:lnum - 1)
+      \ s:IsIncompleteField(l:previous_line) ? s:IncompleteFieldIndent(a:line_number) :
+      \                                        indent(a:line_number - 1)
 endfunction
 
 function! s:SetIndentKeys(keys) abort
-  call cabal#Execute('setlocal', 'indentkeys=' . join(a:keys, ','))
+  call fn#Execute('setlocal', 'indentkeys=' . join(a:keys, ','))
 endfunction
 
-function! s:IndentOfPreviousField(lnum) abort
-  for l:lnum in range(a:lnum, 0, -1)
-    let l:line = getline(l:lnum)
-    if s:IsField(l:line)
-      return indent(l:lnum)
+function! s:IndentOfPreviousField(line_number) abort
+  for l:line_number in range(a:line_number, 1, -1)
+    if s:IsField(getline(l:line_number))
+      return indent(l:line_number)
     endif
   endfor
   return 0
 endfunction
 
-function! s:IndentOfNextField(lnum) abort
-  for l:lnum in range(a:lnum, line('$'))
-    let l:line = getline(l:lnum)
-    if s:IsField(l:line)
-      return indent(l:lnum)
+function! s:IndentOfNextField(line_number) abort
+  for l:line_number in range(a:line_number, s:LastLineNumber())
+    if s:IsField(getline(l:line_number))
+      return indent(l:line_number)
     endif
   endfor
   return 0
+endfunction
+
+function! s:LastLineNumber()
+  return line('$')
 endfunction
 
 function! s:LongFieldNames() abort
@@ -73,7 +75,7 @@ endfunction
 
 function! s:IsLongField(string) abort
   let l:pattern =
-      \ '\v^\s*' . cabal#pattern#Choice(s:LongFieldNames()) . '\s*:\s*'
+      \ '\v^\s*' . fn#pattern#Choice(s:LongFieldNames()) . '\s*:\s*'
   return a:string =~# l:pattern
 endfunction
 

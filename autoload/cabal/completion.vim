@@ -22,16 +22,8 @@
 " See @function(cabal#Omnifunc).
 function! cabal#completion#Omnifunc(find_start, current_completion) abort
   return a:find_start
-      \ ? s:FindCompletionStart()
-      \ : s:DoCompletion(a:current_completion)
-endfunction
-
-function! s:FindCompletionStart() abort
-  return s:CompletionPossible() ? s:CompletionPosition() : s:CompletionError()
-endfunction
-
-function! s:CompletionPossible() abort
-  return cabal#CursorColumn() > 0
+      \ ? s:CompletionPosition()
+      \ : s:CompleteWords(a:current_completion)
 endfunction
 
 function! s:CompletionPosition() abort
@@ -43,49 +35,36 @@ function! s:CompletionError() abort
 endfunction
 
 function! s:InsideComment() abort
-  return cabal#syntax#NameAtCursor() =~# 'Comment'
+  return fn#syntax#NameAtCursor() =~# 'Comment'
 endfunction
 
 function! s:KeywordPosition() abort
   return s:PatternPosition(s:KeywordPattern(), s:LineBeforeCursor())
 endfunction
 
-function! s:DoCompletion(current_completion) abort
-  return s:CompleteWords(s:CompletionPosition(), a:current_completion)
-endfunction
-
 function! s:LineBeforeCursor() abort
-  return s:LineBeforeColumn(cabal#CursorColumn())
+  return s:LineBeforeColumn(fn#cursor#Column())
 endfunction
 
 function! s:LineBeforeColumn(column) abort
-  return cabal#CursorLine()[: a:column - 1]
+  return fn#cursor#LineText()[: a:column - 1]
 endfunction
 
-function! s:CompleteWords(completion_position, current_completion) abort
-  let [l:text, l:truncate] =
-      \ s:InvokedFromYouCompleteMe(a:completion_position, a:current_completion)
-      \ ? [s:LineBeforeCursor()[a:completion_position :], 1]
-      \ : [a:current_completion, 0]
-  return {'words': s:FilteredFieldNames(text, truncate)}
+function! s:CompleteWords(current_completion) abort
+  return {'words': s:FilteredFieldNames(a:current_completion)}
 endfunction
 
-function! s:FilteredFieldNames(completion, truncate) abort
-  let l:x = filter(
+function! s:FilteredFieldNames(completion) abort
+  return filter(
       \ cabal#syntax#Keywords(),
-      \ 'maktaba#string#StartsWith(v:val, a:completion)')
-  return a:truncate ? map(l:x, 'strpart(v:val, l:length)') : l:x
-endfunction
-
-function! s:InvokedFromYouCompleteMe(position, completion) abort
-  return a:position != cabal#CursorColumn() && empty(a:completion)
+      \ 'fn#string#IsPrefixOf(a:completion, v:val)')
 endfunction
 
 function! s:PatternPosition(pattern, string) abort
-  return cabal#pattern#Match(a:string, a:pattern, strlen(a:string))
+  return fn#pattern#Match(a:string, a:pattern, strlen(a:string))
 endfunction
 
 function! s:KeywordPattern() abort
-  return '\v[[:alpha:]-][[:alnum:]-]*$'
+  return '\v[[:alpha:]][[:alnum:]-]*$'
 endfunction
 

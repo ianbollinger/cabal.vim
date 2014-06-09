@@ -19,9 +19,25 @@
 " SOFTWARE.
 
 ""
-" Omnicompleter for Cabal package descriptions.
-" @public
-function! cabal#Omnifunc(find_start, current_completion) abort
-  return cabal#completion#Omnifunc(a:find_start, a:current_completion)
+"
+function! fn#bundle#Enter(file) abort
+  return maktaba#plugin#Enter(a:file)
 endfunction
 
+""
+"
+function! fn#bundle#Get(bundle_name) abort
+  return maktaba#plugin#Get(a:bundle_name)
+endfunction
+
+""
+"
+function! fn#bundle#GetFlag(bundle, flag_name) abort
+  return a:bundle.Flag(a:flag_name)
+endfunction
+
+""
+"
+function! fn#bundle#SetFlagDefault(bundle, flag_name, default) abort
+  call a:bundle.Flag(a:flag_name, a:default)
+endfunction

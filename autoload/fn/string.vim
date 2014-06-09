@@ -19,9 +19,8 @@
 " SOFTWARE.
 
 ""
-" Omnicompleter for Cabal package descriptions.
-" @public
-function! cabal#Omnifunc(find_start, current_completion) abort
-  return cabal#completion#Omnifunc(a:find_start, a:current_completion)
+"
+function! fn#string#IsPrefixOf(prefix, string) abort
+  return maktaba#string#StartsWith(a:string, a:prefix)
 endfunction
 

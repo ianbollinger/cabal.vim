@@ -19,9 +19,20 @@
 " SOFTWARE.
 
 ""
-" Omnicompleter for Cabal package descriptions.
-" @public
-function! cabal#Omnifunc(find_start, current_completion) abort
-  return cabal#completion#Omnifunc(a:find_start, a:current_completion)
+"
+function! fn#assert#IsDict(value) abort
+  return maktaba#ensure#IsDict(a:value)
+endfunction
+
+""
+"
+function! fn#assert#IsFuncref(value) abort
+  return maktaba#ensure#IsFuncref(a:value)
+endfunction
+
+""
+"
+function! fn#assert#IsList(value) abort
+  return maktaba#ensure#IsList(a:value)
 endfunction
 

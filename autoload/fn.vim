@@ -19,9 +19,42 @@
 " SOFTWARE.
 
 ""
-" Omnicompleter for Cabal package descriptions.
-" @public
-function! cabal#Omnifunc(find_start, current_completion) abort
-  return cabal#completion#Omnifunc(a:find_start, a:current_completion)
+"
+function! fn#WithDefaultCompatibilityOptions(func)
+  let l:saved_compatibility_options = s:GetAndResetCompatibilityOptions()
+  try
+    call a:func()
+  finally
+    call s:RestoreCompatibilityOptions(l:saved_compatibility_options)
+  endtry
+endfunction
+
+""
+"
+function! fn#Execute(...) abort
+  execute join(a:000)
+endfunction
+
+""
+" Surround a {string} with double quotes and escape any double quotes marks it
+" contains.
+function! fn#Quote(string) abort
+  return '"' . escape(a:string, '"') . '"'
+endfunction
+
+""
+" The identity function.
+function! fn#Id(x) abort
+  return a:x
+endfunction
+
+function! s:GetAndResetCompatibilityOptions() abort
+  let l:saved_compatibility_options = &cpoptions
+  set cpoptions&vim
+  return l:saved_compatibility_options
+endfunction
+
+function! s:RestoreCompatibilityOptions(saved_compatibility_options) abort
+  let &cpoptions = a:saved_compatibility_options
 endfunction
 

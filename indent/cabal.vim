@@ -19,6 +19,6 @@
 " SOFTWARE.
 
 if !exists('b:did_indent')
-  call cabal#WithDefaultCompatibilityOptions(function('cabal#indent#Main'))
+  call fn#WithDefaultCompatibilityOptions(function('cabal#indent#Main'))
 endif
 

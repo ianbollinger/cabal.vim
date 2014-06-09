@@ -18,10 +18,53 @@
 " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 " SOFTWARE.
 
-""
-" Omnicompleter for Cabal package descriptions.
-" @public
-function! cabal#Omnifunc(find_start, current_completion) abort
-  return cabal#completion#Omnifunc(a:find_start, a:current_completion)
-endfunction
+describe 'cabal#syntax#FieldNames'
+  it ''
+  end
+end
+
+describe 'cabal#syntax#Keywords'
+  it ''
+  end
+end
+
+describe 'fn#syntax#NameAtCursor'
+  it ''
+  end
+end
+
+describe 'fn#syntax#Name'
+  it ''
+  end
+end
+
+describe 'fn#syntax#Attribute'
+  it ''
+  end
+end
+
+describe 'cabal#syntax#Main'
+  it ''
+  end
+end
+
+describe 'cabal#syntax#Keyword'
+  it ''
+  end
+end
+
+describe 'cabal#syntax#Match'
+  it ''
+  end
+end
+
+describe 'cabal#syntax#Region'
+  it ''
+  end
+end
+
+describe 'cabal#syntax#FoldText'
+  it ''
+  end
+end
 

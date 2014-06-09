@@ -18,10 +18,15 @@
 " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 " SOFTWARE.
 
-""
-" Omnicompleter for Cabal package descriptions.
-" @public
-function! cabal#Omnifunc(find_start, current_completion) abort
-  return cabal#completion#Omnifunc(a:find_start, a:current_completion)
+"'
+" The first element in {list} that satisfies {predicate}, or {default} if no
+" element does.
+function! fn#list#Find(predicate, default, list) abort
+  for l:element in a:list
+    if a:predicate(l:element)
+      return l:element
+    endif
+  endfor
+  return a:default
 endfunction
 

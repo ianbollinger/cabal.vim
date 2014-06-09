@@ -20,10 +20,9 @@
 
 ""
 " (Bi-)map {function} over a heterogeneous {dictionary} and discard the result.
-function! cabal#dict#Map_(function, dictionary) abort
-  call maktaba#ensure#IsFuncref(a:function)
-  call maktaba#ensure#IsDict(a:dictionary)
-  for [l:key, l:value] in items(a:dictionary)
+function! fn#dict#Map_(function, dictionary) abort
+  call fn#assert#IsFuncref(a:function)
+  for [l:key, l:value] in items(fn#assert#IsDict(a:dictionary))
     call a:function(l:key, l:value)
     unlet l:value
   endfor
@@ -31,11 +30,10 @@ endfunction
 
 ""
 " Left fold {function} over a heterogeneous {dictionary}.
-function! cabal#dict#FoldLeft(function, initial, dictionary) abort
-  call maktaba#ensure#IsFuncref(a:function)
-  call maktaba#ensure#IsDict(a:dictionary)
+function! fn#dict#FoldLeft(function, initial, dictionary) abort
+  call fn#assert#IsFuncref(a:function)
   let l:accumulator = a:initial
-  for [l:key, l:value] in items(a:dictionary)
+  for [l:key, l:value] in items(fn#assert#IsDict(a:dictionary))
     let l:accumulator = a:function(l:key, l:value, l:accumulator)
     unlet l:value
   endfor
@@ -44,11 +42,10 @@ endfunction
 
 ""
 " Map {function} over a heterogeneous {dictionary} and concatenate the result.
-function! cabal#dict#ConcatMap(function, dictionary) abort
-  call maktaba#ensure#IsFuncref(a:function)
-  call maktaba#ensure#IsDict(a:dictionary)
+function! fn#dict#ConcatMap(function, dictionary) abort
+  call fn#assert#IsFuncref(a:function)
   let l:accumulator = ''
-  for [l:key, l:value] in items(a:dictionary)
+  for [l:key, l:value] in items(fn#assert#IsDict(a:dictionary))
     let l:accumulator .= a:function(l:key, l:value)
     unlet l:value
   endfor
@@ -57,11 +54,10 @@ endfunction
 
 ""
 " Right-biased union of a sequence of dictionaries.
-function! cabal#dict#Union(...) abort
+function! fn#dict#Union(...) abort
   let l:accumulator = {}
   for l:dictionary in a:000
-    call maktaba#ensure#IsDict(l:dictionary)
-    call extend(l:accumulator, l:dictionary)
+    call extend(l:accumulator, fn#assert#IsDict(l:dictionary))
   endfor
   return l:accumulator
 endfunction

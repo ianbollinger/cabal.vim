@@ -19,6 +19,6 @@
 " SOFTWARE.
 
 if !exists('b:current_syntax')
-  call cabal#WithDefaultCompatibilityOptions(function('cabal#syntax#Main'))
+  call fn#WithDefaultCompatibilityOptions(function('cabal#syntax#Main'))
 endif
 
