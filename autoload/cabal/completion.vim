@@ -47,7 +47,7 @@ function! s:LineBeforeCursor() abort
 endfunction
 
 function! s:LineBeforeColumn(column) abort
-  return fn#cursor#LineText()[: a:column - 1]
+  return fn#cursor#TextLine()[: a:column - 1]
 endfunction
 
 function! s:CompleteWords(current_completion) abort

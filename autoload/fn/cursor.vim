@@ -26,7 +26,7 @@ endfunction
 
 ""
 " The text of the line containing the cursor.
-function! fn#cursor#LineText() abort
+function! fn#cursor#TextLine() abort
   return getline('.')
 endfunction
 

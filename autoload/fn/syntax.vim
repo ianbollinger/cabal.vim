@@ -22,7 +22,7 @@
 " The name of the syntax match group under the cursor.
 function! fn#syntax#NameAtCursor(...) abort
   let l:column = fn#cursor#Column() + (s:InInsertMode() ==# 'i' ? 0 : 1)
-  return fn#syntax#Name(fn#cursor#LineText(), l:column)
+  return fn#syntax#Name(fn#cursor#TextLine(), l:column)
 endfunction
 
 ""
