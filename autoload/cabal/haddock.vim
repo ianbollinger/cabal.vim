@@ -36,40 +36,40 @@ function! cabal#haddock#Main() abort
       \ 'keepend': 1,
       \ })
   call cabal#syntax#Region('HaddockImage', '[^\\]\zs\<\<', '[^\\]\zs\>\>', {
-      \ 'matchgroup': 'Delimiter',
+      \ 'matchgroup': 'HaddockDelimiter',
       \ 'contained': 1,
       \ 'containedin': '@cabalHaddock',
       \ 'oneline': 1,
       \ 'keepend': 1,
       \ })
-  call cabal#syntax#Region('Underlined', '\s' . "'", '[^\\]\zs' . "'", {
-      \ 'matchgroup': 'Delimiter',
+  call cabal#syntax#Region('HaddockSymbol', '\s' . "'", '[^\\]\zs' . "'", {
+      \ 'matchgroup': 'HaddockDelimiter',
       \ 'contained': 1,
       \ 'containedin': '@cabalHaddock',
       \ 'oneline': 1,
       \ })
   call cabal#syntax#Region('HaddockModule', '[^\\]\zs"', '[^\\]\zs"', {
-      \ 'matchgroup': 'Delimiter',
+      \ 'matchgroup': 'HaddockDelimiter',
       \ 'contained': 1,
       \ 'containedin': '@cabalHaddock',
       \ 'oneline': 1,
       \ 'keepend': 1,
       \ })
-  call cabal#syntax#Region('blah', '[^\\]\zs\@', '[^\\]\zs\@', {
-      \ 'matchgroup': 'Delimiter',
+  call cabal#syntax#Region('HaddockSnippet', '[^\\]\zs\@', '[^\\]\zs\@', {
+      \ 'matchgroup': 'HaddockDelimiter',
       \ 'contained': 1,
       \ 'containedin': '@cabalHaddock',
       \ 'contains': '@Haskell',
       \ })
-  call cabal#syntax#Region('String', '[^\\]\zs/', '[^\\]\zs/', {
-      \ 'matchgroup': 'Delimiter',
+  call cabal#syntax#Region('HaddockItalics', '[^\\]\zs/', '[^\\]\zs/', {
+      \ 'matchgroup': 'HaddockDelimiter',
       \ 'contained': 1,
       \ 'containedin': '@cabalHaddock',
       \ 'oneline': 1,
       \ 'keepend': 1
       \ })
   call cabal#syntax#Region('HaddockBold', '[^\\]\zs__', '[^\\]\zs__', {
-      \ 'matchgroup': 'Delimiter',
+      \ 'matchgroup': 'HaddockDelimiter',
       \ 'contained': 1,
       \ 'containedin': '@cabalHaddock',
       \ 'oneline': 1,
@@ -90,31 +90,38 @@ function! cabal#haddock#Main() abort
       \ 'contained': 1,
       \ 'containedin': '@cabalHaddock',
       \ })
+   call s:DefineCluster()
+endfunction
+
+function! s:DefineCluster() abort
   syntax cluster cabalHaddock contains=
-      \ cabalUnderlined,
-      \ cabalblah,
-      \ cabalString,
-      \ cabalDelimiter,
-      \ cabalHaddockUrl,
-      \ cabalHaddockImage,
-      \ cabalHaddockModule,
       \ cabalHaddockBold,
-      \ cabalHaddockList,
+      \ cabalHaddockDelimiter,
+      \ cabalHaddockEscape,
       \ cabalHaddockHeading,
-      \ cabalHaddockEscape
+      \ cabalHaddockImage,
+      \ cabalHaddockItalics,
+      \ cabalHaddockList,
+      \ cabalHaddockModule,
+      \ cabalHaddockSnippet,
+      \ cabalHaddockSymbol,
+      \ cabalHaddockUrl
 endfunction
 
 ""
 "
 function! cabal#haddock#Links() abort
   return {
-      \ 'HaddockModule': 'String',
       \ 'HaddockBold': 'String',
-      \ 'HaddockUrl': 'cabalUrl',
-      \ 'HaddockImage': 'cabalUrl',
+      \ 'HaddockDelimiter': 'Delimiter',
       \ 'HaddockEscape': 'SpecialCharacter',
       \ 'HaddockHeading': 'String',
+      \ 'HaddockImage': 'cabalUrl',
+      \ 'HaddockItalics': 'String',
       \ 'HaddockList': 'Delimiter',
+      \ 'HaddockModule': 'String',
+      \ 'HaddockSymbol': 'String',
+      \ 'HaddockUrl': 'cabalUrl'
       \ }
 endfunction
 
