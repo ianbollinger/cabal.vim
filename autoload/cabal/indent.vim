@@ -21,6 +21,13 @@
 ""
 "
 function! cabal#indent#Main() abort
+  if !exists('b:did_indent')
+    call fn#WithDefaultCompatibilityOptions(function('s:Inner'))
+    let b:did_indent = 1
+  endif
+endfunction
+
+function! s:Inner() abort
   setlocal autoindent
   setlocal nolisp
   if has('cindent')
@@ -29,7 +36,6 @@ function! cabal#indent#Main() abort
     endif
     call s:SetIndentKeys(['!^F', 'o', 'O'])
   endif
-  let b:did_indent = 1
 endfunction
 
 ""
