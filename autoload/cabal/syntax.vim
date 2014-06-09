@@ -51,10 +51,7 @@ endfunction
 ""
 " Entry point for the syntax highlighter for Cabal package descriptions.
 function! cabal#syntax#Main() abort
-  if !exists('b:current_syntax')
-    call fn#WithDefaultCompatibilityOptions(function('s:Inner'))
-    let b:current_syntax = 'cabal'
-  endif
+  call fn#syntax#Highlighter('cabal', function('s:Inner'))
 endfunction
 
 function! s:Inner() abort

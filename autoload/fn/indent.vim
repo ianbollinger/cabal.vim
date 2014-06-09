@@ -18,33 +18,16 @@
 " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 " SOFTWARE.
 
-function! fn#syntax#Highlighter(syntax, function)
-  if !exists('b:current_syntax')
+""
+"
+function! fn#indent#Indenter(function) abort
+  if !exists('b:did_indent')
     call fn#WithDefaultCompatibilityOptions(a:function)
-    let b:current_syntax = a:syntax
+    let b:did_indent = 1
   endif
 endfunction
 
-""
-" The name of the syntax match group under the cursor.
-function! fn#syntax#NameAtCursor(...) abort
-  let l:column = fn#cursor#Column() + (s:InInsertMode() ==# 'i' ? 0 : 1)
-  return fn#syntax#Name(fn#cursor#TextLine(), l:column)
-endfunction
-
-""
-" The name of the syntax match group at the given {line} and {column}.
-function! fn#syntax#Name(line, column) abort
-  return fn#syntax#Attribute('name', a:line, a:column)
-endfunction
-
-""
-" The value of syntax {attribute} at the given {line} and {column}.
-function! fn#syntax#Attribute(attribute, line, column) abort
-  return synIDattr(synID(a:line, a:column, 0), a:attribute)
-endfunction
-
-function! s:InInsertMode() abort
-  return mode() ==# 'i'
+function! fn#indent#SetKeys(keys) abort
+  call fn#Execute('setlocal', 'indentkeys=' . join(a:keys, ','))
 endfunction
 
