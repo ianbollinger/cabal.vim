@@ -51,6 +51,13 @@ endfunction
 ""
 " Entry point for the syntax highlighter for Cabal package descriptions.
 function! cabal#syntax#Main() abort
+  if !exists('b:current_syntax')
+    call fn#WithDefaultCompatibilityOptions(function('s:Inner'))
+    let b:current_syntax = 'cabal'
+  endif
+endfunction
+
+function! s:Inner() abort
   syntax include @Haskell syntax/haskell.vim
   call s:DefineConstants()
   call s:SetLocalVimOptions()
@@ -60,7 +67,6 @@ function! cabal#syntax#Main() abort
   call cabal#haddock#Main()
   call s:DefineRegions()
   call s:DefineLinks()
-  let b:current_syntax = 'cabal'
 endfunction
 
 ""

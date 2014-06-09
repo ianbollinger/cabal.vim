@@ -18,7 +18,5 @@
 " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 " SOFTWARE.
 
-if !exists('b:current_syntax')
-  call fn#WithDefaultCompatibilityOptions(function('cabal#syntax#Main'))
-endif
+call cabal#syntax#Main()
 
