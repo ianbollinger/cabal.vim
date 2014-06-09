@@ -28,6 +28,12 @@ endfunction
 
 ""
 "
+function! cabal#syntax#KeywordPattern() abort
+  return '\v[[:alpha:]][[:alnum:]-]*'
+endfunction
+
+""
+"
 function! cabal#syntax#Keywords() abort
   return cabal#syntax#FieldNames()
       \ + fn#bundle#GetFlag(s:bundle, 'syntax_sections')

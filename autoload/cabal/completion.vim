@@ -39,7 +39,10 @@ function! s:InsideComment() abort
 endfunction
 
 function! s:KeywordPosition() abort
-  return s:PatternPosition(s:KeywordPattern(), fn#cursor#TextBefore())
+  return s:PatternPosition(
+      \ cabal#syntax#KeywordPattern(),
+      \ fn#cursor#TextBefore()
+      \ )
 endfunction
 
 function! s:CompleteWords(current_completion) abort
@@ -53,10 +56,6 @@ function! s:FilteredFieldNames(completion) abort
 endfunction
 
 function! s:PatternPosition(pattern, string) abort
-  return fn#pattern#Match(a:string, a:pattern, strlen(a:string))
-endfunction
-
-function! s:KeywordPattern() abort
-  return '\v[[:alpha:]][[:alnum:]-]*$'
+  return fn#pattern#Match(a:string, a:pattern . '$', strlen(a:string))
 endfunction
 
