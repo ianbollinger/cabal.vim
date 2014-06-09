@@ -19,34 +19,19 @@
 " SOFTWARE.
 
 ""
-" See @function(cabal#Omnifunc).
-function! cabal#completion#Omnifunc(find_start, current_completion) abort
-  return fn#completion#Omnifunc(
-      \ function('s:CompletionPosition'),
-      \ function('s:FilteredFieldNames'),
-      \ a:find_start,
-      \ a:current_completion,
-      \ )
+"
+function! fn#completion#Omnifunc(
+    \ finder,
+    \ completer,
+    \ find_start,
+    \ current_completion,
+    \ ) abort
+  return a:find_start
+      \ ? a:finder()
+      \ : {'words': a:completer(a:current_completion)}
 endfunction
 
-function! s:CompletionPosition() abort
-  return s:InsideComment() ? fn#completion#Error() : s:KeywordPosition()
-endfunction
-
-function! s:InsideComment() abort
-  return fn#syntax#NameAtCursor() =~# 'Comment'
-endfunction
-
-function! s:KeywordPosition() abort
-  return fn#pattern#MatchLast(
-      \ cabal#syntax#KeywordPattern(),
-      \ fn#cursor#TextBefore()
-      \ )
-endfunction
-
-function! s:FilteredFieldNames(current_completion) abort
-  return filter(
-      \ cabal#syntax#Keywords(),
-      \ 'fn#string#IsPrefixOf(a:current_completion, v:val)')
+function! fn#completion#Error() abort
+  return -1
 endfunction
 
