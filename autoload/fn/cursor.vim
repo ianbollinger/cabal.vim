@@ -30,3 +30,13 @@ function! fn#cursor#TextLine() abort
   return getline('.')
 endfunction
 
+""
+"
+function! fn#cursor#TextBefore() abort
+  return s:TextBeforeColumn(fn#cursor#Column())
+endfunction
+
+function! s:TextBeforeColumn(column) abort
+  return fn#cursor#TextLine()[: a:column - 1]
+endfunction
+

@@ -39,15 +39,7 @@ function! s:InsideComment() abort
 endfunction
 
 function! s:KeywordPosition() abort
-  return s:PatternPosition(s:KeywordPattern(), s:LineBeforeCursor())
-endfunction
-
-function! s:LineBeforeCursor() abort
-  return s:LineBeforeColumn(fn#cursor#Column())
-endfunction
-
-function! s:LineBeforeColumn(column) abort
-  return fn#cursor#TextLine()[: a:column - 1]
+  return s:PatternPosition(s:KeywordPattern(), fn#cursor#TextBefore())
 endfunction
 
 function! s:CompleteWords(current_completion) abort
