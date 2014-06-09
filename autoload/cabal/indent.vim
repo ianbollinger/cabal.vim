@@ -23,8 +23,12 @@
 function! cabal#indent#Main() abort
   setlocal autoindent
   setlocal nolisp
-  setlocal indentexpr=cabal#indent#IndentExpr(v:lnum)
-  call s:SetIndentKeys(['!^F', 'o', 'O'])
+  if has('cindent')
+    if has('eval')
+      setlocal indentexpr=cabal#indent#IndentExpr(v:lnum)
+    endif
+    call s:SetIndentKeys(['!^F', 'o', 'O'])
+  endif
   let b:did_indent = 1
 endfunction
 
