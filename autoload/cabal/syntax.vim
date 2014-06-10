@@ -87,12 +87,14 @@ function! s:DefineConstants() abort
       \ 'language':
         \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_languages')),
       \
-      \ 'identifier': '[[:alpha:]][a-zA-Z0-9_]*'
+      \ 'module': fn#pattern#SepBy1('[[:upper:]][[:alnum:]_'']*', '.')
       \ }
 
   call extend(g:cabal_syntax_patterns, {
       \ 'token_list':
-        \ fn#pattern#SepBy1(g:cabal_syntax_patterns.token, '\s*,=\s*'),
+        \ fn#pattern#SepBy1(g:cabal_syntax_patterns.token, '\s*,?\s*'),
+      \ 'module_list':
+        \ fn#pattern#SepBy1(g:cabal_syntax_patterns.module, '\s*,?\s*'),
       \ 'cabal_version': '\>\=\s*' . g:cabal_syntax_patterns.version,
       \
       \ 'url': g:cabal_syntax_patterns.free_form,
@@ -100,7 +102,6 @@ function! s:DefineConstants() abort
       \ })
 
    call extend(g:cabal_syntax_patterns, {
-      \ 'identifier_list': g:cabal_syntax_patterns.token_list,
       \ 'package_list': g:cabal_syntax_patterns.token_list,
       \ 'extension_list': g:cabal_syntax_patterns.token_list,
       \ 'program_list': g:cabal_syntax_patterns.token_list,

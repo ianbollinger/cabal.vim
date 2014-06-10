@@ -59,7 +59,7 @@ let s:root_fields = {
 
 let s:library_fields = {
     \ 'exposed': {'pattern': 'boolean', 'link': 'cabalBoolean'},
-    \ 'exposed-modules': {'pattern': 'identifier_list'},
+    \ 'exposed-modules': {'pattern': 'module_list'},
     \ }
 
 let s:build_info_fields = {
@@ -87,7 +87,7 @@ let s:build_info_fields = {
     \ 'install-includes': {'pattern': 'token_list'},
     \ 'ld-options': {'pattern': 'token_list'},
     \ 'nhc98-options': {'pattern': 'token_list'},
-    \ 'other-modules': {'pattern': 'identifier_list'},
+    \ 'other-modules': {'pattern': 'module_list'},
     \ 'pkgconfig-depends': {'pattern': 'pkgconfig'},
     \ }
 
@@ -96,7 +96,7 @@ let s:executable_fields = {
     \ }
 
 let s:test_suite_fields = {
-    \ 'test-module': {'pattern': 'identifier'},
+    \ 'test-module': {'pattern': 'module'},
     \ 'type': {'pattern': 'type', 'link': 'cabalEnum'},
     \ }
 
