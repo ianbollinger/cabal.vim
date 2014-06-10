@@ -86,10 +86,9 @@ function! s:DefinePatterns() abort
   let l:language =
       \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_languages'))
   let l:module = fn#pattern#SepBy1('[[:upper:]][[:alnum:]_'']*', '.')
-  let l:type = escape(
-      \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_test_suite_types')),
-      \ '.'
-      \ )
+  let l:types = fn#bundle#GetFlag(s:bundle, 'syntax_test_suite_types')
+      \ + fn#bundle#GetFlag(s:bundle, 'syntax_repository_type')
+  let l:type = escape(fn#pattern#Choice(l:types), '.')
   let l:token_list = fn#pattern#SepBy1(l:token, l:separator)
   let l:compiler =
       \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_compilers'))
