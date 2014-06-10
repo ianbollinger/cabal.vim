@@ -97,6 +97,10 @@ function! s:DefinePatterns() abort
       \ l:separator,
       \ )
   let l:package = fn#pattern#SepBy1('[[:digit:]]*[[:alpha:]][[:alnum:]]*', '-')
+  let l:extension_list = fn#pattern#SepBy1(
+      \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_extensions')),
+      \ l:separator,
+      \ )
   let g:cabal_syntax_patterns = {
       \ 'free_form': l:free_form,
       \ 'version': l:version,
@@ -113,9 +117,9 @@ function! s:DefinePatterns() abort
       \ 'module_list': fn#pattern#SepBy1(l:module, l:separator),
       \ 'cabal_version': '\>\=\s*' . l:version,
       \ 'haskell_file': '.{-}\.%(l)?hs',
+      \ 'extension_list': l:extension_list,
       \
       \ 'package_list': l:token_list,
-      \ 'extension_list': l:token_list,
       \ 'program_list': l:token_list,
       \ 'pkgconfig': l:token_list,
       \ 'url': l:free_form,

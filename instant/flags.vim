@@ -72,7 +72,7 @@ let s:build_info_fields = {
     \ 'c-sources': {'pattern': 'token'},
     \ 'cc-options': {'pattern': 'token_list'},
     \ 'default-language': {'pattern': 'language', 'link': 'cabalEnum'},
-    \ 'extensions': {'pattern': 'extension_list'},
+    \ 'extensions': {'pattern': 'extension_list', 'link': 'cabalEnum'},
     \ 'extra-lib-dirs': {'pattern': 'token_list'},
     \ 'extra-libraries': {'pattern': 'token_list'},
     \ 'frameworks': {'pattern': 'token_list'},
