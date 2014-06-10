@@ -25,8 +25,8 @@ endif
 
 let s:root_fields = {
     \ 'author': {'pattern': 'free_form'},
-    \ 'bug-reports': {'pattern': 'url', 'link': 'Url'},
-    \ 'build-type': {'pattern': 'build_type', 'link': 'Enum'},
+    \ 'bug-reports': {'pattern': 'url', 'link': 'cabalUrl'},
+    \ 'build-type': {'pattern': 'build_type', 'link': 'cabalEnum'},
     \ 'cabal-version': {
       \ 'pattern': 'cabal_version',
       \ 'contains': ['cabalOperator', 'cabalVersion'],
@@ -42,23 +42,23 @@ let s:root_fields = {
     \ 'extra-doc-files': {'pattern': 'token_list'},
     \ 'extra-source-files': {'pattern': 'token_list'},
     \ 'extra-tmp-files': {'pattern': 'token_list'},
-    \ 'homepage': {'pattern': 'url', 'link': 'Url'},
-    \ 'license': {'pattern': 'license', 'link': 'Enum'},
+    \ 'homepage': {'pattern': 'url', 'link': 'cabalUrl'},
+    \ 'license': {'pattern': 'license', 'link': 'cabalEnum'},
     \ 'license-file': {'pattern': 'token'},
     \ 'maintainer': {'pattern': 'free_form'},
-    \ 'name': {'pattern': 'package', 'link': 'Package'},
-    \ 'package-url': {'pattern': 'url', 'link': 'Url'},
+    \ 'name': {'pattern': 'package', 'link': 'cabalPackage'},
+    \ 'package-url': {'pattern': 'url', 'link': 'cabalUrl'},
     \ 'stability': {'pattern': 'free_form', 'no-errors': 1},
     \ 'synopsis': {'pattern': 'free_form', 'contains': '@Spell'},
     \ 'tested-with': {
       \ 'pattern': 'compiler_list',
       \ 'contains': ['cabalOperator', 'cabalVersion'],
       \ },
-    \ 'version': {'pattern': 'version', 'link': 'Version'},
+    \ 'version': {'pattern': 'version', 'link': 'cabalVersion'},
     \ }
 
 let s:library_fields = {
-    \ 'exposed': {'pattern': 'boolean', 'link': 'Boolean'},
+    \ 'exposed': {'pattern': 'boolean', 'link': 'cabalBoolean'},
     \ 'exposed-modules': {'pattern': 'identifier_list'},
     \ }
 
@@ -68,7 +68,7 @@ let s:build_info_fields = {
       \ 'contains': ['cabalOperator', 'cabalVersion'],
       \ },
     \ 'build-tools': {'pattern': 'program_list'},
-    \ 'buildable': {'pattern': 'boolean', 'link': 'Boolean'},
+    \ 'buildable': {'pattern': 'boolean', 'link': 'cabalBoolean'},
     \ 'c-sources': {'pattern': 'token'},
     \ 'cc-options': {'pattern': 'token_list'},
     \ 'default-language': {'pattern': 'language'},
@@ -97,17 +97,17 @@ let s:executable_fields = {
 
 let s:test_suite_fields = {
     \ 'test-module': {'pattern': 'identifier'},
-    \ 'type': {'pattern': 'type', 'link': 'Enum'},
+    \ 'type': {'pattern': 'type', 'link': 'cabalEnum'},
     \ }
 
 let s:flag_fields = {
-    \ 'default': {'pattern': 'boolean', 'link': 'Boolean'},
-    \ 'manual': {'pattern': 'boolean', 'link': 'Boolean'},
+    \ 'default': {'pattern': 'boolean', 'link': 'cabalBoolean'},
+    \ 'manual': {'pattern': 'boolean', 'link': 'cabalBoolean'},
     \ }
 
 let s:source_repository_fields = {
     \ 'branch': {'pattern': 'token'},
-    \ 'location': {'pattern': 'url', 'link': 'Url'},
+    \ 'location': {'pattern': 'url', 'link': 'cabalUrl'},
     \ 'module': {'pattern': 'token'},
     \ 'subdir': {'pattern': 'token'},
     \ 'tag': {'pattern': 'token'},

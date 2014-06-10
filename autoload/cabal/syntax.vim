@@ -54,6 +54,12 @@ function! cabal#syntax#Main() abort
   call fn#syntax#Highlighter('cabal', function('s:Inner'))
 endfunction
 
+""
+"
+function! cabal#syntax#FoldText() abort
+  return getline(v:foldstart) . ' '
+endfunction
+
 function! s:Inner() abort
   syntax include @Haskell syntax/haskell.vim
   call s:DefineConstants()
@@ -66,49 +72,7 @@ function! s:Inner() abort
   call s:DefineLinks()
 endfunction
 
-""
-"
-function! cabal#syntax#Keyword(group_name, keywords, ...) abort
-  let l:options = a:0 > 0 ? a:1 : {}
-  if !has_key(l:options, 'contained')
-    let l:options.contained = 1
-  endif
-  call fn#Execute(
-      \ 'syntax keyword',
-      \ s:match_group_prefix . a:group_name,
-      \ s:FormatOptions(l:options),
-      \ join(a:keywords),
-      \ )
-endfunction
-
-""
-"
-function! cabal#syntax#Match(group_name, pattern, ...) abort
-  let l:options = a:0 > 0 ? s:FormatOptions(a:1) : ' '
-  let l:match_group = s:match_group_prefix . a:group_name
-  let l:pattern = s:Pattern(a:pattern)
-  call fn#Execute('syntax match', l:match_group, l:options, l:pattern)
-endfunction
-
-""
-"
-function! cabal#syntax#Region(group_name, start, end, ...) abort
-  let l:options = a:0 > 0 ? s:FormatOptions(a:1) : ' '
-  let l:match_group = s:match_group_prefix . a:group_name
-  let l:start = 'start=' . s:Pattern(a:start)
-  let l:end = 'end=' . s:Pattern(a:end)
-  call fn#Execute('syntax region', l:match_group, l:start, l:end, l:options)
-endfunction
-
-""
-"
-function! cabal#syntax#FoldText() abort
-  return getline(v:foldstart) . ' '
-endfunction
-
 function! s:DefineConstants() abort
-  let s:match_group_prefix = 'cabal'
-
   let g:cabal_syntax_patterns = {
       \ 'free_form': '.*',
       \ 'version': '\d+%(\.%(\d)+)*',
@@ -151,27 +115,27 @@ function! s:SetLocalVimOptions() abort
 endfunction
 
 function! s:DefineKeywords() abort
-  call fn#dict#Map_(function('cabal#syntax#Keyword'), {
-      \ 'Todo': fn#bundle#GetFlag(s:bundle, 'syntax_todo'),
-      \ 'SectionName': fn#bundle#GetFlag(s:bundle, 'syntax_sections'),
-      \ 'FieldName': cabal#syntax#FieldNames(),
-      \ 'Function': ['arch', 'flag', 'impl', 'os'],
-      \ 'Conditional': ['else', 'endif', 'if'],
-      \ 'Boolean': ['False', 'True'],
-      \ 'Compiler': fn#bundle#GetFlag(s:bundle, 'syntax_compilers'),
+  call fn#dict#Map_(function('fn#syntax#Keyword'), {
+      \ 'cabalTodo': fn#bundle#GetFlag(s:bundle, 'syntax_todo'),
+      \ 'cabalSectionName': fn#bundle#GetFlag(s:bundle, 'syntax_sections'),
+      \ 'cabalFieldName': cabal#syntax#FieldNames(),
+      \ 'cabalFunction': ['arch', 'flag', 'impl', 'os'],
+      \ 'cabalConditional': ['else', 'endif', 'if'],
+      \ 'cabalBoolean': ['False', 'True'],
+      \ 'cabalCompiler': fn#bundle#GetFlag(s:bundle, 'syntax_compilers'),
       \ })
 endfunction
 
 function! s:DefineMatches() abort
-  call cabal#syntax#Match('Comment', '^\s*--.*$', {
-      \ 'contains': [s:match_group_prefix . 'Todo', '@Spell'],
+  call fn#syntax#Match('cabalComment', '^\s*--.*$', {
+      \ 'contains': ['cabalTodo', '@Spell'],
       \ })
-  call cabal#syntax#Match(
-      \ 'Operator',
+  call fn#syntax#Match(
+      \ 'cabalOperator',
       \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_operators')),
       \ {'contained': 1, 'display': 1}
       \ )
-  call cabal#syntax#Match('InvalidValue', '.*$', {'contained': 1})
+  call fn#syntax#Match('cabalInvalidValue', '.*$', {'contained': 1})
 endfunction
 
 function! s:DefineFields() abort
@@ -182,55 +146,52 @@ function! s:DefineFields() abort
 endfunction
 
 function! s:DefineRegions() abort
-  call cabal#syntax#Match(
-      \ 'EmptyField',
+  call fn#syntax#Match(
+      \ 'cabalEmptyField',
       \ '^(\s*)[^-].{-}\s*:\s*(\n\1)*(%$|\n[^ ])')
-  call cabal#syntax#Region(
-      \ 'Identifier',
+  call fn#syntax#Region(
+      \ 'cabalIdentifier',
       \ '\c^' . fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_sections')),
       \ '$', {
-        \ 'matchgroup': 'Section',
+        \ 'matchgroup': 'cabalSection',
         \ 'display': 1,
         \ 'oneline': 1,
-        \ 'contains': s:match_group_prefix . 'SectionName',
+        \ 'contains': 'cabalSectionName',
         \ })
-  call cabal#syntax#Region(
-      \ 'Identifier',
+  call fn#syntax#Region(
+      \ 'cabalIdentifier',
       \ fn#pattern#Choice(['os', 'arch', 'impl', 'flag']) . '\(',
       \ '\)', {
-        \ 'matchgroup': 'Keyword',
+        \ 'matchgroup': 'cabalKeyword',
         \ 'display': 1,
         \ 'oneline': 1,
         \ 'contained': 1,
-        \ 'contains': s:match_group_prefix . 'Identifier',
+        \ 'contains': 'cabalIdentifier',
         \ })
-  call cabal#syntax#Region(
-      \ 'Identifier',
+  call fn#syntax#Region(
+      \ 'cabalIdentifier',
       \ '\c^\s*' . fn#pattern#Choice(['if', 'else', 'endif']),
       \ '$', {
-        \ 'matchgroup': 'Conditional',
+        \ 'matchgroup': 'cabalConditional',
         \ 'display': 1,
         \ 'oneline': 1,
-        \ 'contains': [
-          \ s:match_group_prefix . 'Identifier',
-          \ s:match_group_prefix . 'Boolean'
-          \ ],
+        \ 'contains': ['cabalIdentifier', 'cabalBoolean'],
         \ })
-  call cabal#syntax#Region(
-      \ 'Fold',
+  call fn#syntax#Region(
+      \ 'cabalFold',
       \ '\c^' . fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_sections')) . '>',
       \ '\ze^\S', {
         \ 'skip': '^--',
         \ 'transparent': 1,
         \ 'fold': 1,
         \ })
-  call cabal#syntax#Match(
-      \ 'Compiler',
+  call fn#syntax#Match(
+      \ 'cabalCompiler',
       \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_compilers')),
       \ {'contained': 1, 'display': 1}
       \ )
-  call cabal#syntax#Match(
-      \ 'Version',
+  call fn#syntax#Match(
+      \ 'cabalVersion',
       \ g:cabal_syntax_patterns.version,
       \ {'contained': 1, 'display': 1}
       \ )
@@ -238,51 +199,51 @@ endfunction
 
 function! s:DefineLinks() abort
   let l:links = extend({
-      \ 'EmptyField': 'Error',
-      \ 'InvalidValue': 'Error',
-      \ 'Url': 'Underlined',
-      \ 'Todo': 'Todo',
-      \ 'Enum': 'Type',
-      \ 'Package': 'Type',
-      \ 'Operator': 'Operator',
-      \ 'Boolean': 'Boolean',
-      \ 'Version': 'Number',
-      \ 'Comment': 'Comment',
-      \ 'Field': 'Define',
-      \ 'Delimiter': 'Delimiter',
-      \ 'Identifier': 'Identifier',
-      \ 'Section': 'Statement',
-      \ 'Keyword': 'Keyword',
-      \ 'Conditional': 'Conditional',
-      \ 'String': 'String',
-      \ 'Underlined': 'Underlined',
+      \ 'cabalEmptyField': 'Error',
+      \ 'cabalInvalidValue': 'Error',
+      \ 'cabalUrl': 'Underlined',
+      \ 'cabalTodo': 'Todo',
+      \ 'cabalEnum': 'Type',
+      \ 'cabalPackage': 'Type',
+      \ 'cabalOperator': 'Operator',
+      \ 'cabalBoolean': 'Boolean',
+      \ 'cabalVersion': 'Number',
+      \ 'cabalComment': 'Comment',
+      \ 'cabalField': 'Define',
+      \ 'cabalDelimiter': 'Delimiter',
+      \ 'cabalIdentifier': 'Identifier',
+      \ 'cabalSection': 'Statement',
+      \ 'cabalKeyword': 'Keyword',
+      \ 'cabalConditional': 'Conditional',
+      \ 'cabalString': 'String',
+      \ 'cabalUnderlined': 'Underlined',
       \ }, cabal#haddock#Links())
-  call fn#dict#Map_(function('s:Link'), l:links)
+  call fn#dict#Map_(function('fn#syntax#Link'), l:links)
 endfunction
 
 function! s:DefineField(field, value) abort
-  let l:formatted_name = s:StripHyphens(a:field)
+  let l:formatted_name = 'cabal' . s:StripHyphens(a:field)
   let l:field_group = l:formatted_name . 'Field'
   let l:value_group = l:formatted_name . 'Value'
   let l:field_pattern = s:FieldPattern(a:field)
   let l:field_options = s:FieldOptions(a:value, l:value_group)
-  call cabal#syntax#Match(l:field_group, l:field_pattern, l:field_options)
+  call fn#syntax#Match(l:field_group, l:field_pattern, l:field_options)
   let l:value_options = {'contained': 1}
   if has_key(a:value, 'contains')
     let l:value_options.contains = a:value.contains
   endif
   let l:value_pattern = s:ValuePattern(a:value)
-  call cabal#syntax#Match(l:value_group, l:value_pattern, l:value_options)
-  call s:Link(l:field_group, s:match_group_prefix . 'Field')
+  call fn#syntax#Match(l:value_group, l:value_pattern, l:value_options)
+  call fn#syntax#Link(l:field_group, 'cabalField')
   if has_key(a:value, 'link')
-    call s:Link(l:value_group, s:match_group_prefix . a:value.link)
+    call fn#syntax#Link(l:value_group, a:value.link)
   endif
 endfunction
 
 function! s:FieldOptions(value, value_group) abort
-  let l:next_groups = [s:match_group_prefix . a:value_group]
+  let l:next_groups = [a:value_group]
   if !has_key(a:value, 'no-errors')
-    let l:next_groups += [s:match_group_prefix . 'InvalidValue']
+    call add(l:next_groups, 'cabalInvalidValue')
   endif
   return {'display': 1, 'nextgroup': l:next_groups}
 endfunction
@@ -297,36 +258,7 @@ function! s:ValuePattern(value) abort
       \ : g:cabal_syntax_patterns[a:value.pattern] . '\s*$'
 endfunction
 
-function! s:Link(from, to) abort
-  call fn#Execute(
-      \ 'highlight default link',
-      \ s:match_group_prefix . a:from,
-      \ a:to,
-      \ )
-endfunction
-
-function! s:Pattern(string) abort
-  return fn#Quote('\v' . a:string)
-endfunction
-
 function! s:StripHyphens(string) abort
   return substitute(a:string, '-', '', 'g')
-endfunction
-
-function! s:FormatOptions(options) abort
-  return fn#dict#ConcatMap(function('s:FormatOption'), a:options)
-endfunction
-
-function! s:FormatOption(key, value) abort
-  return a:key
-      \ . (a:value is# 1 ? '' : '=' . s:FormatOptionValue(a:key, a:value))
-      \ . ' '
-endfunction
-
-function! s:FormatOptionValue(key, value) abort
-  return a:key is# 'matchgroup'     ? s:match_group_prefix . a:value
-     \ : a:key is# 'skip'           ? s:Pattern(a:value)
-     \ : type(a:value) is# type([]) ? join(a:value, ',')
-     \ :                              a:value
 endfunction
 

@@ -44,7 +44,64 @@ function! fn#syntax#Attribute(attribute, line, column) abort
   return synIDattr(synID(a:line, a:column, 0), a:attribute)
 endfunction
 
+""
+"
+function! fn#syntax#Link(from, to) abort
+  call fn#Execute('highlight default link', a:from, a:to)
+endfunction
+
+""
+"
+function! fn#syntax#Keyword(group_name, keywords, ...) abort
+  let l:options = a:0 > 0 ? a:1 : {}
+  if !has_key(l:options, 'contained')
+    let l:options.contained = 1
+  endif
+  call fn#Execute(
+      \ 'syntax keyword',
+      \ a:group_name,
+      \ s:FormatOptions(l:options),
+      \ join(a:keywords),
+      \ )
+endfunction
+
+""
+"
+function! fn#syntax#Match(group_name, pattern, ...) abort
+  let l:options = a:0 > 0 ? s:FormatOptions(a:1) : ' '
+  call fn#Execute('syntax match', a:group_name, l:options, s:Pattern(a:pattern))
+endfunction
+
+""
+"
+function! fn#syntax#Region(group_name, start, end, ...) abort
+  let l:options = a:0 > 0 ? s:FormatOptions(a:1) : ' '
+  let l:start = 'start=' . s:Pattern(a:start)
+  let l:end = 'end=' . s:Pattern(a:end)
+  call fn#Execute('syntax region', a:group_name, l:start, l:end, l:options)
+endfunction
+
 function! s:InInsertMode() abort
   return mode() ==# 'i'
+endfunction
+
+function! s:FormatOptions(options) abort
+  return fn#dict#ConcatMap(function('s:FormatOption'), a:options)
+endfunction
+
+function! s:FormatOption(key, value) abort
+  return a:key
+      \ . (a:value is# 1 ? '' : '=' . s:FormatOptionValue(a:key, a:value))
+      \ . ' '
+endfunction
+
+function! s:FormatOptionValue(key, value) abort
+  return a:key is# 'skip'           ? s:Pattern(a:value)
+     \ : type(a:value) is# type([]) ? join(a:value, ',')
+     \ :                              a:value
+endfunction
+
+function! s:Pattern(string) abort
+  return fn#Quote('\v' . a:string)
 endfunction
 
