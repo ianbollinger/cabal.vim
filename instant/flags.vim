@@ -52,7 +52,7 @@ let s:root_fields = {
     \ 'synopsis': {'pattern': 'free_form', 'contains': '@Spell'},
     \ 'tested-with': {
       \ 'pattern': 'compiler_list',
-      \ 'contains': ['cabalOperator', 'cabalVersion'],
+      \ 'contains': ['cabalCompiler', 'cabalOperator', 'cabalVersion'],
       \ },
     \ 'version': {'pattern': 'version', 'link': 'cabalVersion'},
     \ }

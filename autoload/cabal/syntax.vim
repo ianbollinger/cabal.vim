@@ -213,6 +213,7 @@ endfunction
 
 function! s:DefineLinks() abort
   let l:links = extend({
+      \ 'cabalCompiler': 'cabalEnum',
       \ 'cabalEmptyField': 'Error',
       \ 'cabalInvalidValue': 'Error',
       \ 'cabalUrl': 'Underlined',
