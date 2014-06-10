@@ -94,18 +94,19 @@ function! cabal#haddock#Main() abort
 endfunction
 
 function! s:DefineCluster() abort
-  syntax cluster cabalHaddock contains=
-      \ cabalHaddockBold,
-      \ cabalHaddockDelimiter,
-      \ cabalHaddockEscape,
-      \ cabalHaddockHeading,
-      \ cabalHaddockImage,
-      \ cabalHaddockItalics,
-      \ cabalHaddockList,
-      \ cabalHaddockModule,
-      \ cabalHaddockSnippet,
-      \ cabalHaddockSymbol,
-      \ cabalHaddockUrl
+  call fn#syntax#Cluster('cabalHaddock', [
+      \ 'cabalHaddockBold',
+      \ 'cabalHaddockDelimiter',
+      \ 'cabalHaddockEscape',
+      \ 'cabalHaddockHeading',
+      \ 'cabalHaddockImage',
+      \ 'cabalHaddockItalics',
+      \ 'cabalHaddockList',
+      \ 'cabalHaddockModule',
+      \ 'cabalHaddockSnippet',
+      \ 'cabalHaddockSymbol',
+      \ 'cabalHaddockUrl',
+      \ ])
 endfunction
 
 ""

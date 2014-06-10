@@ -67,6 +67,12 @@ endfunction
 
 ""
 "
+function! fn#syntax#Cluster(name, contents) abort
+  call fn#Execute('syntax cluster', a:name, 'contains=' . join(a:contents, ','))
+endfunction
+
+""
+"
 function! fn#syntax#Match(group_name, pattern, ...) abort
   let l:options = a:0 > 0 ? s:FormatOptions(a:1) : ' '
   call fn#Execute('syntax match', a:group_name, l:options, s:Pattern(a:pattern))
