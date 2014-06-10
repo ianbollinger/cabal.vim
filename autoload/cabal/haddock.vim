@@ -21,76 +21,65 @@
 ""
 "
 function! cabal#haddock#Main() abort
+   call s:DefineRegions()
+   call s:DefineMatches()
+   call s:DefineCluster()
+endfunction
+
+function! s:DefineRegions() abort
   "call fn#syntax#Region('cabalHaddockSnippet', '[^\\]\zs\>%(\>\>)=', '$', {
   "    \ 'matchgroup': 'cabalDelimiter',
   "    \ 'contains': '@Haskell',
   "    \ 'contained': 1,
-  "    \ 'containedin': '@cabalHaddock',
   "    \ 'oneline': 1,
   "    \ })
   " \ 'matchgroup': 'cabalDelimiter',
   call fn#syntax#Region('cabalHaddockUrl', '[^\\]\zs\<', '[^\\]\zs\>', {
       \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
       \ 'oneline': 1,
       \ 'keepend': 1,
       \ })
   call fn#syntax#Region('cabalHaddockImage', '[^\\]\zs\<\<', '[^\\]\zs\>\>', {
       \ 'matchgroup': 'cabalHaddockDelimiter',
       \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
       \ 'oneline': 1,
       \ 'keepend': 1,
       \ })
   call fn#syntax#Region('cabalHaddockSymbol', '\s' . "'", '[^\\]\zs' . "'", {
       \ 'matchgroup': 'cabalHaddockDelimiter',
       \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
       \ 'oneline': 1,
       \ })
   call fn#syntax#Region('cabalHaddockModule', '[^\\]\zs"', '[^\\]\zs"', {
       \ 'matchgroup': 'cabalHaddockDelimiter',
       \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
       \ 'oneline': 1,
       \ 'keepend': 1,
       \ })
   call fn#syntax#Region('cabalHaddockSnippet', '[^\\]\zs\@', '[^\\]\zs\@', {
       \ 'matchgroup': 'cabalHaddockDelimiter',
       \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
       \ 'contains': '@Haskell',
       \ })
   call fn#syntax#Region('cabalHaddockItalics', '[^\\]\zs/', '[^\\]\zs/', {
       \ 'matchgroup': 'cabalHaddockDelimiter',
       \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
       \ 'oneline': 1,
       \ 'keepend': 1
       \ })
   call fn#syntax#Region('cabalHaddockBold', '[^\\]\zs__', '[^\\]\zs__', {
       \ 'matchgroup': 'cabalHaddockDelimiter',
       \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
       \ 'oneline': 1,
       \ 'keepend': 1
       \ })
-  call fn#syntax#Match('cabalHaddockList', '^\s+%(\*|\d+\.|\(\d+\))', {
-      \ 'display': 1,
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-     \ })
-  call fn#syntax#Match('cabalHaddockHeading', '^\s+\=+.*', {
-      \ 'display': 1,
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-      \ })
-  call fn#syntax#Match('cabalHaddockEscape', '\\.', {
-      \ 'display': 1,
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-      \ })
-   call s:DefineCluster()
+endfunction
+
+function! s:DefineMatches() abort
+  let l:options = {'display': 1, 'contained': 1}
+  call fn#syntax#Match('cabalHaddockEscape', '\\.', l:options)
+  call fn#syntax#Match('cabalHaddockHeading', '^\s+\=+.*', l:options)
+  call fn#syntax#Match('cabalHaddockList', '^\s+%(\*|\d+\.|\(\d+\))', l:options)
 endfunction
 
 function! s:DefineCluster() abort
@@ -122,7 +111,7 @@ function! cabal#haddock#Links() abort
       \ 'cabalHaddockList': 'Delimiter',
       \ 'cabalHaddockModule': 'String',
       \ 'cabalHaddockSymbol': 'String',
-      \ 'cabalHaddockUrl': 'cabalUrl'
+      \ 'cabalHaddockUrl': 'cabalUrl',
       \ }
 endfunction
 
