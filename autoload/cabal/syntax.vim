@@ -90,7 +90,13 @@ function! s:DefinePatterns() abort
       \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_test_suite_types')),
       \ '.'
       \ )
-  let l:token_list = fn#pattern#SepBy1(l:token, separator)
+  let l:token_list = fn#pattern#SepBy1(l:token, l:separator)
+  let l:compiler =
+      \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_compilers'))
+  let l:compiler_list = fn#pattern#SepBy1(
+      \ l:compiler . '%(\s*%(\>\=?|\<\=?|\=\=)\s*' . l:version . ')?',
+      \ l:separator,
+      \ )
   let g:cabal_syntax_patterns = {
       \ 'free_form': l:free_form,
       \ 'version': l:version,
@@ -102,9 +108,9 @@ function! s:DefinePatterns() abort
       \ 'type': l:type,
       \ 'language': l:language,
       \ 'module': l:module,
-      \ 'compiler_list': l:token_list,
+      \ 'compiler_list': l:compiler_list,
       \ 'token_list': l:token_list,
-      \ 'module_list': fn#pattern#SepBy1(l:module, separator),
+      \ 'module_list': fn#pattern#SepBy1(l:module, l:separator),
       \ 'cabal_version': '\>\=\s*' . l:version,
       \
       \ 'package_list': l:token_list,
