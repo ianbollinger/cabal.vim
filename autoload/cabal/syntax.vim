@@ -96,6 +96,7 @@ function! s:DefinePatterns() abort
       \ l:compiler . '%(\s*%(\>\=?|\<\=?|\=\=)\s*' . l:version . ')?',
       \ l:separator,
       \ )
+  let l:package = fn#pattern#SepBy1('[[:digit:]]*[[:alpha:]][[:alnum:]]*', '-')
   let g:cabal_syntax_patterns = {
       \ 'free_form': l:free_form,
       \ 'version': l:version,
@@ -103,7 +104,7 @@ function! s:DefinePatterns() abort
       \ 'build_type': l:build_type,
       \ 'token': l:token,
       \ 'license': l:license,
-      \ 'package': '[[:alpha:]][a-zA-Z0-9-]*',
+      \ 'package': l:package,
       \ 'type': l:type,
       \ 'language': l:language,
       \ 'module': l:module,
