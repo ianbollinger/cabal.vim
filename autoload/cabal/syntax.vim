@@ -62,7 +62,7 @@ endfunction
 
 function! s:Inner() abort
   syntax include @Haskell syntax/haskell.vim
-  call s:DefineConstants()
+  call s:DefinePatterns()
   call s:SetLocalVimOptions()
   call s:DefineKeywords()
   call s:DefineMatches()
@@ -72,41 +72,47 @@ function! s:Inner() abort
   call s:DefineLinks()
 endfunction
 
-function! s:DefineConstants() abort
+function! s:DefinePatterns() abort
+  let l:separator = '\s*,?\s*'
+  let l:free_form = '.*'
+  let l:version = '\d+%(\.%(\d)+)*'
+  let l:build_type = escape(
+      \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_build_types')),
+      \ '.',
+      \ )
+  let l:token = '%([^"][^[:space:],]*|"[^"]+")'
+  let l:license =
+      \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_licenses'))
+  let l:language =
+      \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_languages'))
+  let l:module = fn#pattern#SepBy1('[[:upper:]][[:alnum:]_'']*', '.')
+  let l:type = escape(
+      \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_test_suite_types')),
+      \ '.'
+      \ )
+  let l:token_list = fn#pattern#SepBy1(l:token, separator)
   let g:cabal_syntax_patterns = {
-      \ 'free_form': '.*',
-      \ 'version': '\d+%(\.%(\d)+)*',
+      \ 'free_form': l:free_form,
+      \ 'version': l:version,
       \ 'boolean': fn#pattern#Choice(['True', 'False']),
-      \ 'build_type':
-        \ escape(fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_build_types')), '.'),
-      \ 'token': '%([^"][^[:space:],]*|"[^"]+")',
-      \ 'license': fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_licenses')),
+      \ 'build_type': l:build_type,
+      \ 'token': l:token,
+      \ 'license': l:license,
       \ 'package': '[[:alpha:]][a-zA-Z0-9-]*',
-      \ 'type':
-        \ escape(fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_test_suite_types')), '.'),
-      \ 'language':
-        \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_languages')),
+      \ 'type': l:type,
+      \ 'language': l:language,
+      \ 'module': l:module,
+      \ 'compiler_list': l:token_list,
+      \ 'token_list': l:token_list,
+      \ 'module_list': fn#pattern#SepBy1(l:module, separator),
+      \ 'cabal_version': '\>\=\s*' . l:version,
       \
-      \ 'module': fn#pattern#SepBy1('[[:upper:]][[:alnum:]_'']*', '.')
+      \ 'package_list': l:token_list,
+      \ 'extension_list': l:token_list,
+      \ 'program_list': l:token_list,
+      \ 'pkgconfig': l:token_list,
+      \ 'url': l:free_form,
       \ }
-
-  call extend(g:cabal_syntax_patterns, {
-      \ 'token_list':
-        \ fn#pattern#SepBy1(g:cabal_syntax_patterns.token, '\s*,?\s*'),
-      \ 'module_list':
-        \ fn#pattern#SepBy1(g:cabal_syntax_patterns.module, '\s*,?\s*'),
-      \ 'cabal_version': '\>\=\s*' . g:cabal_syntax_patterns.version,
-      \
-      \ 'url': g:cabal_syntax_patterns.free_form,
-      \ 'compiler_list': g:cabal_syntax_patterns.free_form,
-      \ })
-
-   call extend(g:cabal_syntax_patterns, {
-      \ 'package_list': g:cabal_syntax_patterns.token_list,
-      \ 'extension_list': g:cabal_syntax_patterns.token_list,
-      \ 'program_list': g:cabal_syntax_patterns.token_list,
-      \ 'pkgconfig': g:cabal_syntax_patterns.token_list,
-      \ })
 endfunction
 
 function! s:SetLocalVimOptions() abort
