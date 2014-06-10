@@ -92,7 +92,7 @@ let s:build_info_fields = {
     \ }
 
 let s:executable_fields = {
-    \ 'main-is': {'pattern': 'token'},
+    \ 'main-is': {'pattern': 'haskell_file'},
     \ }
 
 let s:test_suite_fields = {

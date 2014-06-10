@@ -112,6 +112,7 @@ function! s:DefinePatterns() abort
       \ 'token_list': l:token_list,
       \ 'module_list': fn#pattern#SepBy1(l:module, l:separator),
       \ 'cabal_version': '\>\=\s*' . l:version,
+      \ 'haskell_file': '.{-}\.%(l)?hs',
       \
       \ 'package_list': l:token_list,
       \ 'extension_list': l:token_list,
