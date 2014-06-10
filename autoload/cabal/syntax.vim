@@ -84,6 +84,8 @@ function! s:DefineConstants() abort
       \ 'package': '[[:alpha:]][a-zA-Z0-9-]*',
       \ 'type':
         \ escape(fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_test_suite_types')), '.'),
+      \ 'language':
+        \ fn#pattern#Choice(fn#bundle#GetFlag(s:bundle, 'syntax_languages')),
       \
       \ 'identifier': '[[:alpha:]][a-zA-Z0-9_]*'
       \ }
@@ -95,7 +97,6 @@ function! s:DefineConstants() abort
       \
       \ 'url': g:cabal_syntax_patterns.free_form,
       \ 'compiler_list': g:cabal_syntax_patterns.free_form,
-      \ 'language': g:cabal_syntax_patterns.token,
       \ })
 
    call extend(g:cabal_syntax_patterns, {

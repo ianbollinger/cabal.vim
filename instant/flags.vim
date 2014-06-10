@@ -71,7 +71,7 @@ let s:build_info_fields = {
     \ 'buildable': {'pattern': 'boolean', 'link': 'cabalBoolean'},
     \ 'c-sources': {'pattern': 'token'},
     \ 'cc-options': {'pattern': 'token_list'},
-    \ 'default-language': {'pattern': 'language'},
+    \ 'default-language': {'pattern': 'language', 'link': 'cabalEnum'},
     \ 'extensions': {'pattern': 'extension_list'},
     \ 'extra-lib-dirs': {'pattern': 'token_list'},
     \ 'extra-libraries': {'pattern': 'token_list'},
@@ -216,5 +216,10 @@ call fn#bundle#SetFlagDefault(s:bundle, 'syntax_operators', [
     \ '\>',
     \ '\>\=',
     \ '\|\|',
+    \ ])
+
+call fn#bundle#SetFlagDefault(s:bundle, 'syntax_languages', [
+    \ 'Haskell98',
+    \ 'Haskell2010',
     \ ])
 
