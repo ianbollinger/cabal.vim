@@ -120,7 +120,7 @@ function! s:DefineKeywords() abort
       \ 'cabalSectionName': fn#bundle#GetFlag(s:bundle, 'syntax_sections'),
       \ 'cabalFieldName': cabal#syntax#FieldNames(),
       \ 'cabalFunction': ['arch', 'flag', 'impl', 'os'],
-      \ 'cabalConditional': ['else', 'endif', 'if'],
+      \ 'cabalConditional': ['else', 'if'],
       \ 'cabalBoolean': ['False', 'True'],
       \ 'cabalCompiler': fn#bundle#GetFlag(s:bundle, 'syntax_compilers'),
       \ })
@@ -170,7 +170,7 @@ function! s:DefineRegions() abort
         \ })
   call fn#syntax#Region(
       \ 'cabalIdentifier',
-      \ '\c^\s*' . fn#pattern#Choice(['if', 'else', 'endif']),
+      \ '\c^\s*' . fn#pattern#Choice(['if', 'else']),
       \ '$', {
         \ 'matchgroup': 'cabalConditional',
         \ 'display': 1,
