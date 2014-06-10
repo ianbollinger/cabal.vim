@@ -202,9 +202,8 @@ call fn#bundle#SetFlagDefault(s:bundle, 'syntax_compilers', [
     \ 'Hugs',
     \ 'JHC',
     \ 'LHC',
-    \ 'NHC98',
+    \ 'NHC',
     \ 'UHC',
-    \ 'YHC',
     \ ])
 
 call fn#bundle#SetFlagDefault(s:bundle, 'syntax_operators', [
