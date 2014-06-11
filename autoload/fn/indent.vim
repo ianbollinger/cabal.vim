@@ -19,24 +19,15 @@
 " SOFTWARE.
 
 ""
-" The number of the column containing the cursor.
-function! fn#cursor#Column() abort
-  return col('.') - 1
-endfunction
-
-""
-" The text of the line containing the cursor.
-function! fn#cursor#TextLine() abort
-  return getline('.')
-endfunction
-
-""
 "
-function! fn#cursor#TextBefore() abort
-  return s:TextBeforeColumn(fn#cursor#Column())
+function! fn#indent#Indenter(function) abort
+  if !exists('b:did_indent')
+    call fn#WithDefaultCompatibilityOptions(a:function)
+    let b:did_indent = 1
+  endif
 endfunction
 
-function! s:TextBeforeColumn(column) abort
-  return fn#cursor#TextLine()[: a:column - 1]
+function! fn#indent#SetKeys(keys) abort
+  call fn#Execute('setlocal', 'indentkeys=' . join(a:keys, ','))
 endfunction
 

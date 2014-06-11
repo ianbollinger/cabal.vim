@@ -21,11 +21,18 @@
 ""
 "
 function! cabal#indent#Main() abort
+  call fn#indent#Indenter(function('s:Inner'))
+endfunction
+
+function! s:Inner() abort
   setlocal autoindent
   setlocal nolisp
-  setlocal indentexpr=cabal#indent#IndentExpr(v:lnum)
-  call s:SetIndentKeys(['!^F', 'o', 'O'])
-  let b:did_indent = 1
+  if has('cindent')
+    if has('eval')
+      setlocal indentexpr=cabal#indent#IndentExpr(v:lnum)
+    endif
+    call fn#indent#SetKeys(['!^F', 'o', 'O'])
+  endif
 endfunction
 
 ""
@@ -37,10 +44,6 @@ function! cabal#indent#IndentExpr(line_number) abort
       \ s:IsLongField(l:previous_line)       ? shiftwidth() :
       \ s:IsIncompleteField(l:previous_line) ? s:IncompleteFieldIndent(a:line_number) :
       \                                        indent(a:line_number - 1)
-endfunction
-
-function! s:SetIndentKeys(keys) abort
-  call fn#Execute('setlocal', 'indentkeys=' . join(a:keys, ','))
 endfunction
 
 function! s:IndentOfPreviousField(line_number) abort
@@ -83,12 +86,12 @@ function! s:IsIncompleteField(string) abort
   return a:string =~# '\v^\s*[[:alpha:]-]+\s*:\s*$'
 endfunction
 
-function! s:IncompleteFieldIndent(lnum) abort
-  let l:next_line = getline(a:lnum + 1)
+function! s:IncompleteFieldIndent(line_number) abort
+  let l:next_line = getline(a:line_number + 1)
   if s:IsField(l:next_line) || s:IsAllWhitespace(l:next_line)
     return shiftwidth()
   else
-    return indent(a:lnum + 1)
+    return indent(a:line_number + 1)
   endif
 endfunction
 

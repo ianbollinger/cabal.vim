@@ -21,50 +21,30 @@
 ""
 " See @function(cabal#Omnifunc).
 function! cabal#completion#Omnifunc(find_start, current_completion) abort
-  return a:find_start
-      \ ? s:CompletionPosition()
-      \ : s:CompleteWords(a:current_completion)
+  return fn#completion#Omnifunc(
+      \ function('s:CompletionPosition'),
+      \ function('s:FilteredFieldNames'),
+      \ a:find_start,
+      \ a:current_completion,
+      \ )
 endfunction
 
 function! s:CompletionPosition() abort
-  return s:InsideComment() ? s:CompletionError() : s:KeywordPosition()
-endfunction
-
-function! s:CompletionError() abort
-  return -1
-endfunction
-
-function! s:InsideComment() abort
-  return fn#syntax#NameAtCursor() =~# 'Comment'
+  return cabal#syntax#InsideComment()
+      \ ? fn#completion#Error()
+      \ : s:KeywordPosition()
 endfunction
 
 function! s:KeywordPosition() abort
-  return s:PatternPosition(s:KeywordPattern(), s:LineBeforeCursor())
+  return fn#pattern#MatchLast(
+      \ cabal#syntax#KeywordPattern(),
+      \ fn#cursor#TextBefore()
+      \ )
 endfunction
 
-function! s:LineBeforeCursor() abort
-  return s:LineBeforeColumn(fn#cursor#Column())
-endfunction
-
-function! s:LineBeforeColumn(column) abort
-  return fn#cursor#LineText()[: a:column - 1]
-endfunction
-
-function! s:CompleteWords(current_completion) abort
-  return {'words': s:FilteredFieldNames(a:current_completion)}
-endfunction
-
-function! s:FilteredFieldNames(completion) abort
+function! s:FilteredFieldNames(current_completion) abort
   return filter(
       \ cabal#syntax#Keywords(),
-      \ 'fn#string#IsPrefixOf(a:completion, v:val)')
-endfunction
-
-function! s:PatternPosition(pattern, string) abort
-  return fn#pattern#Match(a:string, a:pattern, strlen(a:string))
-endfunction
-
-function! s:KeywordPattern() abort
-  return '\v[[:alpha:]][[:alnum:]-]*$'
+      \ 'fn#string#IsPrefixOf(a:current_completion, v:val)')
 endfunction
 

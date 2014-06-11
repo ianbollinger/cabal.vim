@@ -27,6 +27,12 @@ endfunction
 
 ""
 "
+function! fn#pattern#MatchLast(pattern, string) abort
+  return fn#pattern#Match(a:string, a:pattern . '$', strlen(a:string))
+endfunction
+
+""
+"
 function! fn#pattern#Choice(patterns) abort
   return s:Group(join(fn#assert#IsList(a:patterns), '|'))
 endfunction

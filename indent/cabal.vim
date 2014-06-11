@@ -18,7 +18,5 @@
 " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 " SOFTWARE.
 
-if !exists('b:did_indent')
-  call fn#WithDefaultCompatibilityOptions(function('cabal#indent#Main'))
-endif
+call cabal#indent#Main()
 

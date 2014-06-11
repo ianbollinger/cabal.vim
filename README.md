@@ -1,4 +1,4 @@
-cabal.vim v0.0.1
+cabal.vim v0.0.2
 ================
 
 Syntax highlighting, autoindenting, and omnicompletion for Cabal package

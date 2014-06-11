@@ -19,24 +19,19 @@
 " SOFTWARE.
 
 ""
-" The number of the column containing the cursor.
-function! fn#cursor#Column() abort
-  return col('.') - 1
-endfunction
-
-""
-" The text of the line containing the cursor.
-function! fn#cursor#TextLine() abort
-  return getline('.')
-endfunction
-
-""
 "
-function! fn#cursor#TextBefore() abort
-  return s:TextBeforeColumn(fn#cursor#Column())
+function! fn#completion#Omnifunc(
+    \ finder,
+    \ completer,
+    \ find_start,
+    \ current_completion,
+    \ ) abort
+  return a:find_start
+      \ ? a:finder()
+      \ : {'words': a:completer(a:current_completion)}
 endfunction
 
-function! s:TextBeforeColumn(column) abort
-  return fn#cursor#TextLine()[: a:column - 1]
+function! fn#completion#Error() abort
+  return -1
 endfunction
 

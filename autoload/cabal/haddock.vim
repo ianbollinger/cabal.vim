@@ -21,107 +21,97 @@
 ""
 "
 function! cabal#haddock#Main() abort
-  "call cabal#syntax#Region('HaddockSnippet', '[^\\]\zs\>%(\>\>)=', '$', {
-  "    \ 'matchgroup': 'Delimiter',
-  "    \ 'contains': '@Haskell',
-  "    \ 'contained': 1,
-  "    \ 'containedin': '@cabalHaddock',
-  "    \ 'oneline': 1,
-  "    \ })
-  " \ 'matchgroup': 'Delimiter',
-  call cabal#syntax#Region('HaddockUrl', '[^\\]\zs\<', '[^\\]\zs\>', {
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-      \ 'oneline': 1,
-      \ 'keepend': 1,
-      \ })
-  call cabal#syntax#Region('HaddockImage', '[^\\]\zs\<\<', '[^\\]\zs\>\>', {
-      \ 'matchgroup': 'HaddockDelimiter',
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-      \ 'oneline': 1,
-      \ 'keepend': 1,
-      \ })
-  call cabal#syntax#Region('HaddockSymbol', '\s' . "'", '[^\\]\zs' . "'", {
-      \ 'matchgroup': 'HaddockDelimiter',
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-      \ 'oneline': 1,
-      \ })
-  call cabal#syntax#Region('HaddockModule', '[^\\]\zs"', '[^\\]\zs"', {
-      \ 'matchgroup': 'HaddockDelimiter',
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-      \ 'oneline': 1,
-      \ 'keepend': 1,
-      \ })
-  call cabal#syntax#Region('HaddockSnippet', '[^\\]\zs\@', '[^\\]\zs\@', {
-      \ 'matchgroup': 'HaddockDelimiter',
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-      \ 'contains': '@Haskell',
-      \ })
-  call cabal#syntax#Region('HaddockItalics', '[^\\]\zs/', '[^\\]\zs/', {
-      \ 'matchgroup': 'HaddockDelimiter',
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-      \ 'oneline': 1,
-      \ 'keepend': 1
-      \ })
-  call cabal#syntax#Region('HaddockBold', '[^\\]\zs__', '[^\\]\zs__', {
-      \ 'matchgroup': 'HaddockDelimiter',
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-      \ 'oneline': 1,
-      \ 'keepend': 1
-      \ })
-  call cabal#syntax#Match('HaddockList', '^\s+%(\*|\d+\.|\(\d+\))', {
-      \ 'display': 1,
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-     \ })
-  call cabal#syntax#Match('HaddockHeading', '^\s+\=+.*', {
-      \ 'display': 1,
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-      \ })
-  call cabal#syntax#Match('HaddockEscape', '\\.', {
-      \ 'display': 1,
-      \ 'contained': 1,
-      \ 'containedin': '@cabalHaddock',
-      \ })
+   call s:DefineRegions()
+   call s:DefineMatches()
    call s:DefineCluster()
 endfunction
 
+function! s:DefineRegions() abort
+  "call fn#syntax#Region('cabalHaddockSnippet', '[^\\]\zs\>%(\>\>)=', '$', {
+  "    \ 'matchgroup': 'cabalDelimiter',
+  "    \ 'contains': '@Haskell',
+  "    \ 'contained': 1,
+  "    \ 'oneline': 1,
+  "    \ })
+  " \ 'matchgroup': 'cabalDelimiter',
+  call fn#syntax#Region('cabalHaddockUrl', '[^\\]\zs\<', '[^\\]\zs\>', {
+      \ 'contained': 1,
+      \ 'oneline': 1,
+      \ 'keepend': 1,
+      \ })
+  call fn#syntax#Region('cabalHaddockImage', '[^\\]\zs\<\<', '[^\\]\zs\>\>', {
+      \ 'matchgroup': 'cabalHaddockDelimiter',
+      \ 'contained': 1,
+      \ 'oneline': 1,
+      \ 'keepend': 1,
+      \ })
+  call fn#syntax#Region('cabalHaddockSymbol', '\s' . "'", '[^\\]\zs' . "'", {
+      \ 'matchgroup': 'cabalHaddockDelimiter',
+      \ 'contained': 1,
+      \ 'oneline': 1,
+      \ })
+  call fn#syntax#Region('cabalHaddockModule', '[^\\]\zs"', '[^\\]\zs"', {
+      \ 'matchgroup': 'cabalHaddockDelimiter',
+      \ 'contained': 1,
+      \ 'oneline': 1,
+      \ 'keepend': 1,
+      \ })
+  call fn#syntax#Region('cabalHaddockSnippet', '[^\\]\zs\@', '[^\\]\zs\@', {
+      \ 'matchgroup': 'cabalHaddockDelimiter',
+      \ 'contained': 1,
+      \ 'contains': '@Haskell',
+      \ })
+  call fn#syntax#Region('cabalHaddockItalics', '[^\\]\zs/', '[^\\]\zs/', {
+      \ 'matchgroup': 'cabalHaddockDelimiter',
+      \ 'contained': 1,
+      \ 'oneline': 1,
+      \ 'keepend': 1
+      \ })
+  call fn#syntax#Region('cabalHaddockBold', '[^\\]\zs__', '[^\\]\zs__', {
+      \ 'matchgroup': 'cabalHaddockDelimiter',
+      \ 'contained': 1,
+      \ 'oneline': 1,
+      \ 'keepend': 1
+      \ })
+endfunction
+
+function! s:DefineMatches() abort
+  let l:options = {'display': 1, 'contained': 1}
+  call fn#syntax#Match('cabalHaddockEscape', '\\.', l:options)
+  call fn#syntax#Match('cabalHaddockHeading', '^\s+\=+.*', l:options)
+  call fn#syntax#Match('cabalHaddockList', '^\s+%(\*|\d+\.|\(\d+\))', l:options)
+endfunction
+
 function! s:DefineCluster() abort
-  syntax cluster cabalHaddock contains=
-      \ cabalHaddockBold,
-      \ cabalHaddockDelimiter,
-      \ cabalHaddockEscape,
-      \ cabalHaddockHeading,
-      \ cabalHaddockImage,
-      \ cabalHaddockItalics,
-      \ cabalHaddockList,
-      \ cabalHaddockModule,
-      \ cabalHaddockSnippet,
-      \ cabalHaddockSymbol,
-      \ cabalHaddockUrl
+  call fn#syntax#Cluster('cabalHaddock', [
+      \ 'cabalHaddockBold',
+      \ 'cabalHaddockDelimiter',
+      \ 'cabalHaddockEscape',
+      \ 'cabalHaddockHeading',
+      \ 'cabalHaddockImage',
+      \ 'cabalHaddockItalics',
+      \ 'cabalHaddockList',
+      \ 'cabalHaddockModule',
+      \ 'cabalHaddockSnippet',
+      \ 'cabalHaddockSymbol',
+      \ 'cabalHaddockUrl',
+      \ ])
 endfunction
 
 ""
 "
 function! cabal#haddock#Links() abort
   return {
-      \ 'HaddockBold': 'String',
-      \ 'HaddockDelimiter': 'Delimiter',
-      \ 'HaddockEscape': 'SpecialCharacter',
-      \ 'HaddockHeading': 'String',
-      \ 'HaddockImage': 'cabalUrl',
-      \ 'HaddockItalics': 'String',
-      \ 'HaddockList': 'Delimiter',
-      \ 'HaddockModule': 'String',
-      \ 'HaddockSymbol': 'String',
-      \ 'HaddockUrl': 'cabalUrl'
+      \ 'cabalHaddockBold': 'String',
+      \ 'cabalHaddockDelimiter': 'Delimiter',
+      \ 'cabalHaddockEscape': 'SpecialCharacter',
+      \ 'cabalHaddockHeading': 'String',
+      \ 'cabalHaddockImage': 'cabalUrl',
+      \ 'cabalHaddockItalics': 'String',
+      \ 'cabalHaddockList': 'Delimiter',
+      \ 'cabalHaddockModule': 'String',
+      \ 'cabalHaddockSymbol': 'String',
+      \ 'cabalHaddockUrl': 'cabalUrl',
       \ }
 endfunction
 
